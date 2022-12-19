@@ -1,2 +1,2 @@
 # Chess
-Chess on pugame
+Chess on pygame
