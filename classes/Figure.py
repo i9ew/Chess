@@ -51,7 +51,10 @@ class Figure(pygame.sprite.Sprite):
             else:
                 return sl[self.__class__.__name__].lower()
         except KeyError:
-            raise KeyError("There is no such figure in chess")
+            raise KeyError(f"There is no such figure in chess '{self.__class__.__name__}'")
 
     def __str__(self):
         return self.letter
+
+    def __repr__(self):
+        return self.__class__.__name__

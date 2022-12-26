@@ -18,6 +18,7 @@ class SecondScene(Scene):
         self.b.place_figure(Rook, "e2", Chess.BLACK_FIGURE)
         self.b.place_figure(Rook, "g4", Chess.WHITE_FIGURE)
         self.b.place_figure(Knight, "f4", Chess.WHITE_FIGURE)
+        print("--second_scene___")
 
     def input_processing(self, events):
         for event in events:

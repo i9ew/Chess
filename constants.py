@@ -17,7 +17,7 @@ class Chess:
 
 
 # Screen
-RESOLUTION = 1600, 900
+RESOLUTION = 1700, 900
 FPS = 30
 NAME = "chess"
 BG = ColoursRGB.DARKGREY

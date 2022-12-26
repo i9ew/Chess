@@ -1,6 +1,7 @@
 import os
 
 import pygame
+from constants import *
 
 
 def classname(clas):
@@ -23,6 +24,31 @@ def load_image(path, colorkey=None):
     return image
 
 
+def get_figure(figure: str):
+    from classes.figures.Bishop import Bishop
+    from classes.figures.King import King
+    from classes.figures.Knight import Knight
+    from classes.figures.Pawn import Pawn
+    from classes.figures.Queen import Queen
+    from classes.figures.Rook import Rook
+    sl = {
+        "K": King,
+        "R": Rook,
+        "N": Knight,
+        "B": Bishop,
+        "P": Pawn,
+        "Q": Queen
+
+    }
+    try:
+        if figure.isupper():
+            return [sl[figure], Chess.WHITE_FIGURE]
+        else:
+            return [sl[figure.upper()], Chess.BLACK_FIGURE]
+    except KeyError:
+        raise KeyError(f"There is no such figure in chess '{figure}'")
+
+
 def coards_to_indexes(coards):
     sl = {
         "a": 0,
@@ -35,3 +61,18 @@ def coards_to_indexes(coards):
         "h": 7,
     }
     return [sl[coards[0]], 8 - int(coards[1])]
+
+
+def indexes_to_coards(indexes):
+    sl = {
+        0: "a",
+        1: "b",
+        2: "c",
+        3: "d",
+        4: "e",
+        5: "f",
+        6: "g",
+        7: "h"
+    }
+    return str(sl[indexes[0]]) + str(8 - int(indexes[1]))
+
