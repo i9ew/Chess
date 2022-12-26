@@ -10,12 +10,14 @@ class ColoursRGB:
     DARKGREY = (64, 64, 64)
     LIGHTGREY = (187, 187, 187)
 
+
+class Chess:
+    WHITE_FIGURE = "w"
+    BLACK_FIGURE = "b"
+
+
 # Screen
 RESOLUTION = 1600, 900
 FPS = 30
 NAME = "chess"
 BG = ColoursRGB.DARKGREY
-
-
-
-

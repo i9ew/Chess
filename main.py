@@ -5,9 +5,6 @@ from constants import *
 from scenes.main_scene import MainScene
 
 
-def classname(clas):
-    return clas.__class__.__name__
-
 
 class Game:
     def __init__(self, name, size, FPS):

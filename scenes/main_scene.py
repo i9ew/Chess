@@ -3,6 +3,7 @@ import pygame
 from classes.Board import Board
 from classes.Scene import Scene
 from constants import *
+from classes.figures.Rook import Rook
 
 
 class MainScene(Scene):
@@ -12,7 +13,10 @@ class MainScene(Scene):
         self.b2 = Board()
         self.b2.corner = [400, 400]
         self.b2.theme = {"primary_color": ColoursRGB.BLUE,
-                         "secondary_color": ColoursRGB.CREAM}
+                         "secondary_color": ColoursRGB.CREAM,
+                         "figure_style": "alpha"}
+        self.b2.place_figure(Rook, "a1", Chess.WHITE_FIGURE)
+        print(self.b2)
 
     def input_processing(self, events):
         for event in events:
@@ -22,6 +26,10 @@ class MainScene(Scene):
                     self.next_scene = SecondScene
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mousepos = event.pos
+
+    def update(self):
+        self.b.update()
+        self.b2.update()
 
     def render(self, screen):
         self.b.draw(screen)
