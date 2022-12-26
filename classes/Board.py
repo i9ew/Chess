@@ -53,7 +53,7 @@ class Board:
     def place_figure(self, figure, coards, color):
         fig = figure(self.figures, self.theme, color, placement=coards)
         indexes = coards_to_indexes(coards)
-        self.position[indexes[0]][indexes[1]] = fig.letter
+        self.position[indexes[1]][indexes[0]] = fig.letter
 
     def __str__(self):
         ans = "\n"
