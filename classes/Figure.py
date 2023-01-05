@@ -3,7 +3,7 @@ import os
 import pygame
 
 from constants import *
-from functions import load_image
+from functions import load_image, coards_to_indexes
 
 
 class Figure(pygame.sprite.Sprite):
@@ -20,6 +20,10 @@ class Figure(pygame.sprite.Sprite):
         self.rect.x = self.coards[0]
         self.rect.y = self.coards[1]
 
+    def refresh_theme(self):
+        self.image_path = self.get_figure_path()
+        self.image = load_image(self.image_path)
+
     def get_figure_path(self):
         return os.getcwd() + rf"\classes\figures\figure_styles\{self.style}\{self.color}{self.letter}.png"
 
@@ -27,6 +31,19 @@ class Figure(pygame.sprite.Sprite):
         self.coards = coards
         self.rect.x = self.coards[0]
         self.rect.y = self.coards[1]
+
+    def calculate_coards(self, corner, sqare_size, isreversed):
+        indexes = coards_to_indexes(self.placement)
+        coards_on_screen = [indexes[0] * sqare_size,
+                            indexes[1] * sqare_size]
+        if isreversed:
+            coards_on_screen = [7 * sqare_size - coards_on_screen[0], 7 * sqare_size - coards_on_screen[1]]
+
+        coards_on_screen = [coards_on_screen[0] + corner[0], coards_on_screen[1] + corner[1]]
+
+        self.set_coards(coards_on_screen)
+        self.set_size(sqare_size)
+
 
     def set_size(self, size):
         im = load_image(self.image_path)
