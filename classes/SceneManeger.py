@@ -3,8 +3,8 @@ class SceneManeger:
         self.scenes = scenes
         self.activeScene = scenes["main"]()
 
-    def process_scene(self, screen, events):
-        self.activeScene.input_processing(events)
+    def process_scene(self, screen, events, events_p):
+        self.activeScene.input_processing(events, events_p)
         self.activeScene.update()
         self.activeScene.render(screen)
         if self.activeScene.next:

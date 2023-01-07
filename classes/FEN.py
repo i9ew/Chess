@@ -5,6 +5,7 @@ from classes.figures.Queen import Queen
 from classes.figures.King import King
 from classes.figures.Pawn import Pawn
 from functions import get_figure, indexes_to_coards
+from constants import *
 
 class FEN:
     def __init__(self, fen_str):
@@ -27,6 +28,11 @@ class FEN:
                 for el in buf:
                     self.position.append(el)
 
+        self.turn = Chess.WHITE_FIGURE if splited[1] == "w" else Chess.BLACK_FIGURE
+        self.castled = castled
+        self.two_sqare_pawn_move = splited[3]
+        self.moves50 = splited[4]
+        self.move_number = splited[5]
         self.fen_pos = {
             "position": self.position,
             "turn": splited[1],

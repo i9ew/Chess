@@ -1,6 +1,7 @@
 import os
 
 import pygame
+
 from constants import *
 
 
@@ -48,6 +49,15 @@ def get_figure(figure: str):
     except KeyError:
         raise KeyError(f"There is no such figure in chess '{figure}'")
 
+def import_figures():
+    from classes.figures.Pawn import Pawn
+    from classes.figures.King import King
+    from classes.figures.Queen import Queen
+    from classes.figures.Knight import Knight
+    from classes.figures.Rook import Rook
+    from classes.figures.Bishop import Bishop
+    figures = King, Queen, Rook, Bishop, Knight, Pawn
+    return figures
 
 def coards_to_indexes(coards):
     sl = {
@@ -63,6 +73,9 @@ def coards_to_indexes(coards):
     return [sl[coards[0]], 8 - int(coards[1])]
 
 
+def multiply_colorRGB(color, k):
+    pass
+
 def indexes_to_coards(indexes):
     sl = {
         0: "a",
@@ -76,3 +89,7 @@ def indexes_to_coards(indexes):
     }
     return str(sl[indexes[0]]) + str(8 - int(indexes[1]))
 
+
+def inRange(mi, x, ma):
+    ans = [mi[i] <= x[i] <= ma[i] for i in range(len(min(mi, ma, x, key=lambda x: len(x))))]
+    return all(ans)

@@ -20,7 +20,7 @@ class SecondScene(Scene):
         self.b.place_figure(Knight, "f4", Chess.WHITE_FIGURE)
         print("--second_scene___")
 
-    def input_processing(self, events):
+    def input_processing(self, events, events_p):
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
