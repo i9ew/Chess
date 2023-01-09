@@ -1,9 +1,6 @@
-import os
-
 from stockfish import Stockfish
-from functions import *
-import pathlib
 
+from functions import *
 
 
 class StockfishEngine:

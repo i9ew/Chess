@@ -10,6 +10,7 @@ class Scene:
         self.scene_manager = None
         self.bg_image_path = None
         self.bg_image = None
+        self.bg_color = None
 
     def input_processing(self, events, events_p):
         for el in self.elements.values():
@@ -39,6 +40,8 @@ class Scene:
             self.bg_image = pygame.transform.scale(im, RESOLUTION)
 
     def render(self, screen):
+        if self.bg_color is not None:
+            screen.fill(self.bg_color)
         if self.bg_image is not None:
             screen.blit(self.bg_image, (0, 0))
         for el in self.elements.values():

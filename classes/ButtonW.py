@@ -8,6 +8,7 @@ class ButtonW:
         self.surf = pygame.Surface(RESOLUTION, pygame.SRCALPHA)
         self.mouse_coards = [0, 0]
         self._corner = [0, 0]
+        self._bg_size = [0, 0]
         self.font_name = "arial"
         self.font = pygame.font.SysFont("arial", 50)
         self._rect = get_text_rect(text, self.font)[2:]
@@ -24,7 +25,7 @@ class ButtonW:
             "inactiveColour": (0, 0, 0, 0),
             "hoverColour": (0, 0, 0, 0),
             "pressedColour": (0, 0, 0, 0),
-            "radius": 20,
+            "radius": 0,
             "onClick": self.on_click,
             "font": self.font,
             "textColour": (255, 255, 255, 255),
@@ -41,6 +42,19 @@ class ButtonW:
             *self.args_,
             **self.kwargs_
         )
+
+    def set_inactive_bg_colour(self, val):
+
+        self.kwargs_["inactiveColour"] = val
+        self.recreate()
+
+    def set_hover_bg_colour(self, val):
+        self.kwargs_["hoverColour"] = val
+        self.recreate()
+
+    def set_pressed_bg_colour(self, val):
+        self.kwargs_["pressedColour"] = val
+        self.recreate()
 
     def recreate(self):
         self.surf = pygame.Surface(RESOLUTION, pygame.SRCALPHA)

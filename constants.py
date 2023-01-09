@@ -22,6 +22,8 @@ class ColoursRGB:
     CREAM = Colour(253, 244, 227)
     DARKGREY = Colour(64, 64, 64)
     LIGHTGREY = Colour(187, 187, 187)
+    LICHESS = Colour(38, 36, 33)
+    LICHESS2 = Colour(22, 21, 18)
 
 
 class Chess:
@@ -37,7 +39,7 @@ class Chess:
 
 
 # Screen
-RESOLUTION = 1275, 675
+RESOLUTION = 1600, 900
 FPS = 30
 NAME = "chess"
 BG = ColoursRGB.DARKGREY
