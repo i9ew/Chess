@@ -1,3 +1,4 @@
 pygame
 stockfish
 chess
+pygame_widgets

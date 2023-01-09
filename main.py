@@ -1,9 +1,10 @@
 import pygame
+import pygame_widgets as pw
 
 from classes.SceneManeger import SceneManeger
 from constants import *
 from scenes.main_scene import MainScene
-
+from scenes.second_scene import SecondScene
 
 
 class Game:
@@ -14,14 +15,14 @@ class Game:
         self.size = size
         self.FPS = FPS
 
-
     def run(self):
         screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption(self.name)
         clock = pygame.time.Clock()
         running = True
-        scenes = {"main": MainScene}
+        scenes = {"game": MainScene, "menu": SecondScene}
         scene_manager = SceneManeger(scenes)
+        scene_manager.goto_scene("menu")
         dx = dy = 0
         start = (0, 0)
         mousepos = (0, 0)
@@ -47,6 +48,7 @@ class Game:
 
             scene_manager.process_scene(screen, events, [mousepos, pressed_buttons, pressed_keys, [dx, dy]])
             pygame.display.update()
+            pw.update(events)
             clock.tick(self.FPS)
 
 

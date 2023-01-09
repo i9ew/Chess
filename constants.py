@@ -9,6 +9,7 @@ class Colour:
         rgb[2] = max(min(rgb[2], 255), 0)
         return Colour(*rgb)
 
+
 # Colours
 class ColoursRGB:
     BLACK = Colour(0, 0, 0)
@@ -21,9 +22,6 @@ class ColoursRGB:
     CREAM = Colour(253, 244, 227)
     DARKGREY = Colour(64, 64, 64)
     LIGHTGREY = Colour(187, 187, 187)
-
-
-
 
 
 class Chess:

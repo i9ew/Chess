@@ -10,12 +10,12 @@ class Board:
         self.history = []
         self.hud = HUDobjects()
         self.position = [[" " for __ in range(8)] for __ in range(8)]
+        self._board_size = 720
+        self.sqare_size = self.board_size // 8
         self._theme = {"primary_color": ColoursRGB.BROWN,
                        "secondary_color": ColoursRGB.CREAM,
                        "figure_style": "alpha",
                        "hud1": [ColoursRGB.GREEN, 150]}
-        self._board_size = 720
-        self.sqare_size = self.board_size // 8
         self._corner = [0, 0]
         self._game = None
         self.figures = pygame.sprite.Group()
@@ -122,7 +122,7 @@ class Board:
 
                         self.unselect_all()
             if event.type == pygame.MOUSEMOTION:
-                if pressed_buttons[pygame.BUTTON_LEFT - 1] and (abs(dx) > 10 or abs(dy) > 10):
+                if pressed_buttons[pygame.BUTTON_LEFT - 1] and (abs(dx) > 3 or abs(dy) > 3):
                     selected = self.get_selected()
                     if selected:
                         selected.draw_bigger = False
@@ -138,7 +138,7 @@ class Board:
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == pygame.BUTTON_LEFT:
-                    if abs(dx) > 10 or abs(dy) > 10:
+                    if abs(dx) > 3 or abs(dy) > 3:
                         coards_on_board = self.get_mouse_coards_on_board(mousepos)
                         if coards_on_board:
                             if self.selected_sprite_to_track:
@@ -179,6 +179,7 @@ class Board:
             if event.type == pygame.MOUSEBUTTONDOWN and self.get_mouse_coards_on_board(mousepos):
                 if event.button == pygame.BUTTON_RIGHT:
                     self.board_moving = self.corner
+                    self.unselect_all()
 
             if event.type == pygame.MOUSEMOTION:
                 if pressed_buttons[pygame.BUTTON_RIGHT - 1]:

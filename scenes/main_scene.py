@@ -4,6 +4,7 @@ from classes.Board import Board
 from classes.ChessGame import ChessGame
 from classes.Scene import Scene
 from constants import *
+from classes.ButtonW import ButtonW
 
 
 class MainScene(Scene):
@@ -25,16 +26,15 @@ class MainScene(Scene):
         b2.watch_mode = True
         b2.game = g
         b2.board_size = 400
-        b2.corner = [900, 100]
+        b2.corner = [850, 100]
         self.elements["main_board"] = b
         self.elements["watch_board"] = b2
 
-    def input_processing(self, events, events_p):
-        super().input_processing(events, events_p)
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_2:
-                    from scenes.second_scene import SecondScene
-                    self.next_scene = SecondScene
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mousepos = event.pos
+    # def input_processing(self, events, events_p):
+    #     super().input_processing(events, events_p)
+    #     for event in events:
+    #         if event.type == pygame.KEYDOWN:
+    #             if event.key == pygame.K_2:
+    #                 self.scene_manager.goto_scene("menu")
+    #         if event.type == pygame.MOUSEBUTTONDOWN:
+    #             mousepos = event.pos

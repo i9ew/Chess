@@ -49,6 +49,7 @@ def get_figure(figure: str):
     except KeyError:
         raise KeyError(f"There is no such figure in chess '{figure}'")
 
+
 def import_figures():
     from classes.figures.Pawn import Pawn
     from classes.figures.King import King
@@ -58,6 +59,7 @@ def import_figures():
     from classes.figures.Bishop import Bishop
     figures = King, Queen, Rook, Bishop, Knight, Pawn
     return figures
+
 
 def coards_to_indexes(coards):
     sl = {
@@ -73,8 +75,13 @@ def coards_to_indexes(coards):
     return [sl[coards[0]], 8 - int(coards[1])]
 
 
-def multiply_colorRGB(color, k):
-    pass
+def get_text_rect(text, font):
+    # font = pygame.font.SysFont(font_name, size_of_font)
+    text = font.render(
+        text, True, (255, 255, 255))
+    text_rect = text.get_rect()
+    return text_rect
+
 
 def indexes_to_coards(indexes):
     sl = {

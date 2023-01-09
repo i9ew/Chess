@@ -1,7 +1,7 @@
 class SceneManeger:
     def __init__(self, scenes):
         self.scenes = scenes
-        self.activeScene = scenes["main"]()
+        self.activeScene = None
 
     def process_scene(self, screen, events, events_p):
         self.activeScene.input_processing(events, events_p)
@@ -13,3 +13,4 @@ class SceneManeger:
 
     def goto_scene(self, scenename):
         self.activeScene = self.scenes[scenename]()
+        self.activeScene.scene_manager = self

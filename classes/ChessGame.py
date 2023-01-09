@@ -2,7 +2,7 @@ import chess
 
 from classes.FEN import FEN
 from constants import *
-from stockfishEngine.StockfishM import StockfishEngine
+from classes.StockfishM import StockfishEngine
 
 
 class ChessGame:
@@ -50,6 +50,7 @@ class ChessGame:
         self.engine.make_move(from_sqare, to_square)
         for board in self.play_on_boards:
             board.set_FEN_position(self.engine.position)
+        print(self.play_on_boards[0])
         self.board.set_board_fen(self.engine.position.split()[0])
         self.board.turn = self.turn
         if self.is_mate:
