@@ -16,21 +16,22 @@ class EvaluationW:
         self.game_ = None
 
     def connect_to_game(self, game):
-        self.evaluation = game.evaluation
-        value = self.evaluation['value']
-        if self.evaluation['type'] == 'cp':
-            self.c1 = ColoursRGB.WHITE.rgb
-            self.c2 = ColoursRGB.BLACK.rgb
-            self.set_draw_k_from_evaluation(value / 100)
-        elif self.evaluation['type'] == 'mate':
-            if self.evaluation['value'] > 0:
+        if game.evaluation:
+            self.evaluation = game.evaluation
+            value = self.evaluation['value']
+            if self.evaluation['type'] == 'cp':
                 self.c1 = ColoursRGB.WHITE.rgb
-                self.c2 = ColoursRGB.WHITE.rgb
-                self.set_draw_k_from_evaluation(5)
-            elif self.evaluation['value'] < 0:
-                self.c1 = ColoursRGB.BLACK.rgb
                 self.c2 = ColoursRGB.BLACK.rgb
-                self.set_draw_k_from_evaluation(-5)
+                self.set_draw_k_from_evaluation(value / 100)
+            elif self.evaluation['type'] == 'mate':
+                if self.evaluation['value'] > 0:
+                    self.c1 = ColoursRGB.WHITE.rgb
+                    self.c2 = ColoursRGB.WHITE.rgb
+                    self.set_draw_k_from_evaluation(5)
+                elif self.evaluation['value'] < 0:
+                    self.c1 = ColoursRGB.BLACK.rgb
+                    self.c2 = ColoursRGB.BLACK.rgb
+                    self.set_draw_k_from_evaluation(-5)
 
     @property
     def game(self):
@@ -39,7 +40,7 @@ class EvaluationW:
     @game.setter
     def game(self, g):
         self.game_ = g
-        self.set_evaluation_from_game(g)
+        self.connect_to_game(g)
 
     def set_draw_k_from_evaluation(self, val):
         if val > 5:
@@ -76,3 +77,6 @@ class EvaluationW:
     def update(self):
         if self.game is not None:
             self.evaluation = self.game.evaluation
+
+    def input_processing(self, events, events_p):
+        pass

@@ -26,7 +26,7 @@ class Scene:
     def __init__(self):
         self.next_scene = None
         self.elements = Elements()
-        self.error_protection = True
+        self.error_protection = False
         self.scene_manager = None
         self.bg_image_path = None
         self.bg_image = None
@@ -74,6 +74,18 @@ class Scene:
                     raise err
             else:
                 el.draw(screen)
+
+    def disable(self):
+        for el in self.elements:
+            if self.error_protection:
+                try:
+                    el.disable()
+                except AttributeError:
+                    pass
+                except Exception as err:
+                    raise err
+            else:
+                el.disable()
 
     @property
     def next(self):

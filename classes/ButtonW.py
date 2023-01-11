@@ -213,6 +213,12 @@ class ButtonW:
             else:
                 self.ad["onDishover"]()
 
+    def disable(self):
+        self.button.disable()
+
+    def enable(self):
+        self.button.enable()
+
     def input_processing(self, events, events_p):
         mousepos = events_p[0]
         pressed_buttons = events_p[1]

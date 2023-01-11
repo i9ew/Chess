@@ -10,7 +10,7 @@ class StockfishEngine:
         else:
             path = os.getcwd() + r"\stockfishEngine\stockfish_15.1_win_x64_avx2\stockfish-windows-2022-x86-64-avx2.exe"
 
-        self.stockfish = Stockfish(path=path, depth=18, parameters={"Threads": 2, "Minimum Thinking Time": 30})
+        self.stockfish = Stockfish(path=path, depth=12, parameters={"Threads": 8, "Minimum Thinking Time": 5})
         self.position = ""
 
     def set_FEN_position(self, fen):

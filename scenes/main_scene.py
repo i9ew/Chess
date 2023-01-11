@@ -5,6 +5,7 @@ from classes.ChessGame import ChessGame
 from classes.Scene import Scene
 from constants import *
 from classes.ButtonW import ButtonW
+from classes.EvaluationW import EvaluationW
 
 
 class MainScene(Scene):
@@ -12,7 +13,6 @@ class MainScene(Scene):
         super().__init__()
         b = Board()
         g = ChessGame()
-
         print("---main_scene---")
         b.theme = {"primary_color": ColoursRGB.BROWN,
                    "secondary_color": ColoursRGB.CREAM,
@@ -21,12 +21,15 @@ class MainScene(Scene):
         b.corner = [200, 37]
         b.board_size = 600
         b.game = g
-        print(b)
+        # print(b)
         b2 = Board()
         b2.watch_mode = True
         b2.game = g
         b2.board_size = 400
         b2.corner = [850, 100]
+        ev = EvaluationW([70, 500], [100, 37])
+        ev.game = g
+        self.elements.append("ev", ev, 0)
         self.elements.append("main_board", b, 0)
         self.elements.append("watch_board", b2, 0)
 

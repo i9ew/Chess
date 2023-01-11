@@ -49,6 +49,7 @@ class ChessGame:
 
     def make_move(self, from_sqare, to_square):
         move = ""
+        print(11)
         fig = self.play_on_boards[0].get_from_sqare(from_sqare)
         move_l = fig.letter.upper() if fig.letter.upper() != "P" else ""
         move += f"{move_l}{from_sqare}-{to_square}"

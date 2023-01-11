@@ -6,6 +6,7 @@ from constants import *
 class SecondScene(Scene):
     def __init__(self):
         super().__init__()
+        print("---menu_scene---")
         self.bg_color = ColoursRGB.LICHESS2
         but = ButtonW("Начать игру")
         but.text_color = (255, 255, 255, 255)

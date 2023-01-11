@@ -11,6 +11,7 @@ from constants import *
 class BoardEditor(Scene):
     def __init__(self):
         super().__init__()
+        print("---b_scene---")
         self.bg_color = ColoursRGB.LICHESS2
         b = Board()
         b.watch_mode = True
@@ -62,4 +63,4 @@ class BoardEditor(Scene):
         board = self.elements[0, "main_board"]
         ev = self.elements[0, "evaluation"]
         board.game.set_position(fen)
-        ev.connect_to_game(board.game)
+        ev.game = board.game
