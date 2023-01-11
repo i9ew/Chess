@@ -27,8 +27,8 @@ class MainScene(Scene):
         b2.game = g
         b2.board_size = 400
         b2.corner = [850, 100]
-        self.elements["main_board"] = b
-        self.elements["watch_board"] = b2
+        self.elements.append("main_board", b, 0)
+        self.elements.append("watch_board", b2, 0)
 
     # def input_processing(self, events, events_p):
     #     super().input_processing(events, events_p)

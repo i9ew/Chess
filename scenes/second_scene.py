@@ -1,31 +1,28 @@
-import os
-
-import pygame
-
-from classes.Board import Board
-from classes.ChessGame import ChessGame
+from classes.ButtonW import ButtonW
 from classes.Scene import Scene
 from constants import *
-from classes.ButtonW import ButtonW
+
 
 class SecondScene(Scene):
     def __init__(self):
         super().__init__()
+        self.bg_color = ColoursRGB.LICHESS2
         but = ButtonW("Начать игру")
-        but.corner = [(RESOLUTION[0] - but.rect[0]) // 2, (RESOLUTION[1] - but.rect[1]) // 2]
         but.text_color = (255, 255, 255, 255)
-        but.hover_text_color = (0, 255, 0, 255)
-        but.set_inactive_bg_colour((*ColoursRGB.RED.rgb, 50))
+        but.set_inactive_bg_colour((*(self.bg_color * 1.2).rgb, 255))
+        but.set_hover_bg_colour((*(self.bg_color * 1.3).rgb, 255))
         but.on_click(lambda: self.scene_manager.goto_scene("game"))
-        self.bg_color = ColoursRGB.LICHESS2.rgb
-        self.bg_image_path = os.getcwd() + r"\data\assets\images\logo1.png"
-        self.elements["button"] = but
+        but.rect = [300, 300]
+        but.corner = [(RESOLUTION[0] - but.rect[0]) // 2 - 300, (RESOLUTION[1] - but.rect[1]) // 2]
 
-    # def input_processing(self, events, events_p):
-    #     super().input_processing(events, events_p)
-    #     for event in events:
-    #         if event.type == pygame.KEYDOWN:
-    #             if event.key == pygame.K_2:
-    #                 self.scene_manager.goto_scene("game")
-    #         if event.type == pygame.MOUSEBUTTONDOWN:
-    #             mousepos = event.pos
+        but2 = ButtonW("Редактор доски")
+        but2.text_color = (255, 255, 255, 255)
+        but2.set_font("arial", 40)
+        but2.set_inactive_bg_colour((*(self.bg_color * 1.2).rgb, 255))
+        but2.set_hover_bg_colour((*(self.bg_color * 1.3).rgb, 255))
+        but2.on_click(lambda: self.scene_manager.goto_scene("board_editor"))
+        but2.rect = [300, 300]
+        but2.corner = [(RESOLUTION[0] - but2.rect[0]) // 2, (RESOLUTION[1] - but2.rect[1]) // 2]
+
+        self.elements.append("start_game_button", but, 0)
+        self.elements.append("board_editor_button", but2, 0)

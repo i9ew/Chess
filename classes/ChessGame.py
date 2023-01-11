@@ -1,8 +1,8 @@
 import chess
 
 from classes.FEN import FEN
-from constants import *
 from classes.StockfishM import StockfishEngine
+from constants import *
 
 
 class ChessGame:
@@ -15,6 +15,7 @@ class ChessGame:
         self.board = chess.Board(self.FEN_position)
         self.pos_history = []
         self.moves_history = []
+        self.evaluation = None
 
     def move_request(self, from_sqare, to_square):
         fig = self.play_on_boards[0].get_from_sqare(from_sqare)
@@ -25,6 +26,7 @@ class ChessGame:
                 return Chess.PAWN_TRANSFORMATION_WHITE
         if self.engine.is_move_possible(from_sqare, to_square):
             self.make_move(from_sqare, to_square)
+            self.evaluation = self.get_evaluation()
             if self.is_mate:
                 return Chess.MATE
             if self.is_check:
@@ -34,12 +36,16 @@ class ChessGame:
             return Chess.NORMAL_MOVE
         return Chess.INCORRECT_MOVE
 
+    def is_FEN_correct(self, fen_pos):
+        return self.engine.stockfish.is_fen_valid(fen_pos)
+
     def set_position(self, fen_pos):
         for board in self.play_on_boards:
             board.unselect_all()
             board.set_FEN_position(fen_pos)
         self.engine.set_FEN_position(fen_pos)
         self.board.set_board_fen(fen_pos.split()[0])
+        self.evaluation = self.get_evaluation()
 
     def make_move(self, from_sqare, to_square):
         move = ""
@@ -66,8 +72,8 @@ class ChessGame:
             self.set_position(poped)
             return poped
 
-    def history_print(self):
-        pass
+    def get_evaluation(self):
+        return self.engine.get_evaluation()
 
     @property
     def last_move(self):

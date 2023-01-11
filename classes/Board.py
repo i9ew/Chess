@@ -14,7 +14,7 @@ class Board:
         self.sqare_size = self.board_size // 8
         self._theme = {"primary_color": ColoursRGB.BROWN,
                        "secondary_color": ColoursRGB.CREAM,
-                       "figure_style": "alpha",
+                       "figure_style": "merida",
                        "hud1": [ColoursRGB.GREEN, 150]}
         self._corner = [0, 0]
         self._game = None
@@ -32,9 +32,50 @@ class Board:
         self.watch_mode = False
 
         self.board_moving = None
+        self.is_hidden = False
+
+    def draw(self, sc):
+        if not self.is_hidden:
+            self.draw_board(sc, Chess.BLACK_FIGURE if self.isreversed else Chess.WHITE_FIGURE)
+            self.figures.draw(sc)
+            if self.get_selected():
+                # self.draw_possible_moves(sc, self.get_selected().placement)
+                self.hud.draw(sc)
+
+            if self.selected_sprite_to_track is not None:
+                image = self.selected_sprite_to_track.image
+                coards = self.selected_sprite_to_track.rect
+                sc.blit(image, coards)
+            if not self.watch_mode:
+                self.pawn_transformation_table.draw(sc)
+
+    def input_processing(self, events, events_p):
+        if not self.is_hidden:
+            mousepos = events_p[0]
+            pressed_buttons = events_p[1]
+            pressed_keys = events_p[2]
+            dx, dy = events_p[3]
+            # self.move_board(events, events_p)
+            if not self.watch_mode:
+                ans = self.pawn_transformation_processing(events, events_p)
+                if ans is None:
+                    self.move_processing(events, events_p)
+            for event in events:
+                if event.type == pygame.KEYDOWN and self.get_mouse_coards_on_board(mousepos):
+                    if event.key == pygame.K_e:
+                        self.isreversed = not self.isreversed
+                    if event.key == pygame.K_h:
+                        if self.game:
+                            print(*self.game.moves_history)
 
     def update(self):
         pass
+
+    def hide(self):
+        self.is_hidden = True
+
+    def show(self):
+        self.is_hidden = False
 
     @property
     def game(self):
@@ -45,20 +86,6 @@ class Board:
         self.set_FEN_position(game.FEN_position)
         game.play_on_boards.append(self)
         self._game = game
-
-    def draw(self, sc):
-        self.draw_board(sc, Chess.BLACK_FIGURE if self.isreversed else Chess.WHITE_FIGURE)
-        self.figures.draw(sc)
-        if self.get_selected():
-            # self.draw_possible_moves(sc, self.get_selected().placement)
-            self.hud.draw(sc)
-
-        if self.selected_sprite_to_track is not None:
-            image = self.selected_sprite_to_track.image
-            coards = self.selected_sprite_to_track.rect
-            sc.blit(image, coards)
-        if not self.watch_mode:
-            self.pawn_transformation_table.draw(sc)
 
     def add_to_hud_possible_moves(self, from_sqare):
         if self.game:
@@ -151,24 +178,6 @@ class Board:
                     if self.get_selected():
                         self.get_selected().draw_ghoul = False
                     self.selected_sprite_to_track = None
-
-    def input_processing(self, events, events_p):
-        mousepos = events_p[0]
-        pressed_buttons = events_p[1]
-        pressed_keys = events_p[2]
-        dx, dy = events_p[3]
-        self.move_board(events, events_p)
-        if not self.watch_mode:
-            ans = self.pawn_transformation_processing(events, events_p)
-            if ans is None:
-                self.move_processing(events, events_p)
-        for event in events:
-            if event.type == pygame.KEYDOWN and self.get_mouse_coards_on_board(mousepos):
-                if event.key == pygame.K_e:
-                    self.isreversed = not self.isreversed
-                if event.key == pygame.K_h:
-                    if self.game:
-                        print(*self.game.moves_history)
 
     def move_board(self, events, events_p):
         mousepos = events_p[0]

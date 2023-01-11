@@ -5,6 +5,7 @@ from classes.SceneManeger import SceneManeger
 from constants import *
 from scenes.main_scene import MainScene
 from scenes.second_scene import SecondScene
+from scenes.board_editor import BoardEditor
 
 
 class Game:
@@ -20,7 +21,7 @@ class Game:
         pygame.display.set_caption(self.name)
         clock = pygame.time.Clock()
         running = True
-        scenes = {"game": MainScene, "menu": SecondScene}
+        scenes = {"game": MainScene, "menu": SecondScene, "board_editor": BoardEditor}
         scene_manager = SceneManeger(scenes)
         scene_manager.goto_scene("menu")
         dx = dy = 0

@@ -17,11 +17,15 @@ class StockfishEngine:
         if self.stockfish.is_fen_valid(fen):
             self.stockfish.set_fen_position(fen)
             self.position = fen
+            return True
         else:
-            raise KeyError("Invalid FEN")
+            return False
 
     def is_move_possible(self, from_sqare, to_sqare):
         return self.stockfish.is_move_correct(from_sqare + to_sqare)
+
+    def get_evaluation(self):
+        return self.stockfish.get_evaluation()
 
     def make_move(self, from_sqare, to_sqare):
         if self.position:
