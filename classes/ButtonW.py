@@ -87,6 +87,7 @@ class ButtonW:
     def recreate(self):
         self.surf = pygame.Surface(RESOLUTION, pygame.SRCALPHA)
         self.args_[0] = self.surf
+        self.button.disable()
         self.button = Button(
             *self.args_,
             **self.kwargs_,
@@ -151,10 +152,10 @@ class ButtonW:
     @rect.setter
     def rect(self, rect):
         self._rect = rect
-        self.button.setWidth(rect[0])
-        self.button.setHeight(rect[1])
-        self.args_[3] = rect[0]
-        self.args_[4] = rect[1]
+        self.button.setWidth(self._rect[0])
+        self.button.setHeight(self._rect[1])
+        self.args_[3] = self._rect[0]
+        self.args_[4] = self._rect[1]
 
     def set_default_rect(self):
         self.rect = get_text_rect(self.kwargs_["text"], self.font)[2:]

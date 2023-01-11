@@ -15,7 +15,7 @@ class EvaluationW:
         self.c2 = ColoursRGB.BLACK.rgb
         self.game_ = None
 
-    def connect_to_game(self, game):
+    def game_eval(self, game):
         if game.evaluation:
             self.evaluation = game.evaluation
             value = self.evaluation['value']
@@ -40,7 +40,7 @@ class EvaluationW:
     @game.setter
     def game(self, g):
         self.game_ = g
-        self.connect_to_game(g)
+        self.game_eval(g)
 
     def set_draw_k_from_evaluation(self, val):
         if val > 5:
@@ -76,7 +76,7 @@ class EvaluationW:
 
     def update(self):
         if self.game is not None:
-            self.evaluation = self.game.evaluation
+            self.game_eval(self.game)
 
     def input_processing(self, events, events_p):
         pass

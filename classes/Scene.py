@@ -26,7 +26,7 @@ class Scene:
     def __init__(self):
         self.next_scene = None
         self.elements = Elements()
-        self.error_protection = False
+        self.error_protection = True
         self.scene_manager = None
         self.bg_image_path = None
         self.bg_image = None
