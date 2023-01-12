@@ -5,6 +5,7 @@ from classes.Scene import Scene
 from classes.TextInputW import TextInputW
 from classes.TextW import TextW
 from functions import *
+from client import vhod
 
 
 class SecondScene(Scene):
@@ -71,8 +72,10 @@ class SecondScene(Scene):
                 and self.pas.get_text() and self.pas.get_time_from_last_type() > 1 and not self._alredy_called_login:
             print(f"log: {self.log.get_text()}, pas: {self.pas.get_text()}")
             self._alredy_called_login = True
-            if self.log.get_text() == "Максим":
-                self.anim.play_cycle()
+            log = self.log.get_text()
+            pas = self.pas.get_text()
+            verdict = vhod(log, pas)
+            print(verdict)
 
     def _reset_alredy_called_login(self):
         self._alredy_called_login = False
