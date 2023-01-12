@@ -1,7 +1,4 @@
 import os
-
-import pygame
-
 from constants import *
 
 
@@ -61,6 +58,9 @@ def import_figures():
     return figures
 
 
+def create_full_path(path):
+    return os.path.join(os.getcwd(), *path.split("/"))
+
 def coards_to_indexes(coards):
     sl = {
         "a": 0,
@@ -81,6 +81,10 @@ def get_text_rect(text, font):
         text, True, (255, 255, 255))
     text_rect = text.get_rect()
     return text_rect
+
+
+def mouse_in_rect(mousecoards, rect, corner):
+    return inRange(corner, mousecoards, [corner[0] + rect[0], corner[1] + rect[1]])
 
 
 def indexes_to_coards(indexes):

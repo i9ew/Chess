@@ -1,5 +1,5 @@
 import pygame_textinput
-import pygame
+
 from functions import *
 
 
@@ -24,6 +24,18 @@ class TextInputW:
         self._call_from_pass_input = False
         self.textinput_value = None
         self.is_rgb_ = False
+        self._value_states = [self.inital, self.inital]
+        self.functions = {}
+        self._is_hidden = False
+        self.text_color = [0, 0, 0, 255]
+        self.rgb_text_color = [0, 85, 170]
+        self.selected = False
+
+    def hide(self):
+        self._is_hidden = True
+
+    def show(self):
+        self._is_hidden = False
 
     @property
     def is_rgb(self):
@@ -33,9 +45,9 @@ class TextInputW:
     def is_rgb(self, value):
         if value and not self.is_rgb_:
             self.is_rgb_ = value
-            self.textinput.font_color = [0, 85, 170]
         elif not value and self.is_rgb_:
             self.is_rgb_ = value
+            self.textinput.font_color = self.text_color
 
     @property
     def is_password(self):
@@ -80,36 +92,122 @@ class TextInputW:
         self.rect_ = value
         self.font = pygame.font.SysFont("arial", self.rect[1])
 
+    def on_clicked(self, func):
+        self.functions["onClicked"] = func
+
+    def on_clicked_params(self, func):
+        self.functions["onClickedParams"] = func
+
+    def disconnect_on_clicked(self):
+        if "onClicked" in self.functions:
+            del self.functions["onClicked"]
+        if "onClickedParams" in self.functions:
+            del self.functions["onClickedParams"]
+
+    def _on_clicked_process(self):
+        if "onClicked" in self.functions:
+            if "onClickedParams" in self.functions:
+                self.functions["onClicked"](*self.functions["onClickedParams"])
+            else:
+                self.functions["onClicked"]()
+
+    def on_value_changed(self, func):
+        self.functions["onValueChanged"] = func
+
+    def on_value_changed_params(self, func):
+        self.functions["onValueChangedParams"] = func
+
+    def disconnect_on_value_changed(self):
+        if "onValueChanged" in self.functions:
+            del self.functions["onValueChanged"]
+        if "onValueChangedParams" in self.functions:
+            del self.functions["onValueChangedParams"]
+
+    def _on_value_changed_process(self):
+        if "onValueChanged" in self.functions:
+            if "onValueChangedParams" in self.functions:
+                self.functions["onValueChanged"](*self.functions["onValueChangedParams"])
+            else:
+                self.functions["onValueChanged"]()
+
+    @property
+    def value_changed(self):
+        return self._value_states[0] != self._value_states[1]
+
+    def _value_change_catch(self, value):
+        self._value_states = [value, self._value_states[0]]
+
+    def select_processing(self, events, events_p):
+        mousepos = events_p[0]
+        pressed_buttons = events_p[1]
+        pressed_keys = events_p[2]
+        dx, dy = events_p[3]
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == pygame.BUTTON_LEFT:
+                    self.selected = mouse_in_rect(mousepos, self.rect, self.corner)
+
     def input_processing(self, events, events_p):
         mousepos = events_p[0]
         pressed_buttons = events_p[1]
         pressed_keys = events_p[2]
         dx, dy = events_p[3]
+        self.select_processing(events, events_p)
+        if not self._is_hidden and self.selected:
+            for event in events:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                    self._on_clicked_process()
+                if event.type == pygame.KEYDOWN:
+                    if not self.value:
+                        self.textinput.value = ""
 
-        for event in events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                print(f"Input: {self.value}")
-            if event.type == TIMER_EVENT_20TPS:
-                if self.is_rgb:
-                    self.textinput.font_color = [(c + 10) % 255 for c in self.textinput.font_color]
-            if event.type == pygame.KEYDOWN:
-                if not self.value:
-                    self.textinput.value = ""
+            if self.pass_input is not None:
+                self._call_from_pass_input = True
+                self.pass_input.update(events)
+                self._call_from_pass_input = False
+                self.value = self.pass_input.value
+            self.textinput.update(events)
+            if self.textinput_value is not None:
+                self.textinput.value = self.textinput_value
+                self.manager.cursor_pos = len(self.textinput.value)
 
-        if self.pass_input is not None:
-            self._call_from_pass_input = True
-            self.pass_input.update(events)
-            self._call_from_pass_input = False
-            self.value = self.pass_input.value
-        self.textinput.update(events)
-        if self.textinput_value is not None:
-            self.textinput.value = self.textinput_value
-            self.manager.cursor_pos = len(self.textinput.value)
+            self._value_change_catch(self.value)
+            if self.value_changed:
+                self._on_value_changed_process()
+        if not self._is_hidden:
+            if not self.value:
+                self.textinput.value = self.inital
 
-        if not self.value:
-            self.textinput.value = self.inital
+            for event in events:
+                if event.type == TIMER_EVENT_20TPS:
+                    if not self.value:
+                        self.textinput.font_color = self.text_color
+                    elif self.is_rgb:
+                        self.textinput.font_color = [(c + 10) % 255 for c in self.rgb_text_color]
+                        self.rgb_text_color = self.textinput.font_color
+
+        if not self.selected:
+            self.textinput.cursor_visible = False
+            self.textinput.font_color = self.text_color
+        else:
+            self.textinput.cursor_blink_interval = 400
+            if self.is_rgb and self.value:
+                self.textinput.font_color = self.rgb_text_color
+
+    def get_text(self):
+        return self.value
+
+    @property
+    def text(self):
+        return self.value
+
+    @text.setter
+    def text(self, value):
+        self.value = value
+        self.textinput.value = value
 
     def draw(self, screen):
-        self.surf.fill(self.bg_color)
-        self.surf.blit(self.textinput.surface, [0, 0])
-        screen.blit(self.surf, self.corner)
+        if not self._is_hidden:
+            self.surf.fill(self.bg_color)
+            self.surf.blit(self.textinput.surface, [0, 0])
+            screen.blit(self.surf, self.corner)

@@ -6,11 +6,12 @@ from functions import *
 class StockfishEngine:
     def __init__(self):
         if __name__ == "__main__":
-            path = os.getcwd() + r"\stockfish_15.1_win_x64_avx2\stockfish-windows-2022-x86-64-avx2.exe"
+            path = create_full_path(r"/stockfish_15.1_win_x64_avx2/stockfish-windows-2022-x86-64-avx2.exe")
         else:
-            path = os.getcwd() + r"\stockfishEngine\stockfish_15.1_win_x64_avx2\stockfish-windows-2022-x86-64-avx2.exe"
+            path = create_full_path(
+                r"/stockfishEngine/stockfish_15.1_win_x64_avx2/stockfish-windows-2022-x86-64-avx2.exe")
 
-        self.stockfish = Stockfish(path=path, depth=12, parameters={"Threads": 2, "Minimum Thinking Time": 1})
+        self.stockfish = Stockfish(path=path, depth=12, parameters={"Threads": 2, "Minimum Thinking Time": 10})
         self.position = ""
 
     def set_FEN_position(self, fen):

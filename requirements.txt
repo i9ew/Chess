@@ -4,3 +4,4 @@ chess
 pygame_widgets
 pyperclip
 pygame-textinput
+Pillow

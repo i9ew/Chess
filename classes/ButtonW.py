@@ -1,3 +1,4 @@
+import pygame
 from pygame_widgets.button import Button
 
 from functions import *
@@ -46,6 +47,8 @@ class ButtonW:
             *self.args_,
             **self.kwargs_,
         )
+        self._is_hidden = False
+        self._is_disabled = False
 
     @property
     def font(self):
@@ -67,7 +70,12 @@ class ButtonW:
 
     def set_font(self, name, size):
         self._font = pygame.font.SysFont(name, size)
+        # new_rect = get_text_rect(self.kwargs_["text"], self.font)[2:]
+        self.set_default_rect()
         self.kwargs_["font"] = self._font
+        self.kwargs_["fontSize"] = size
+        # self.corner = [self.corner[0]]
+        self.recreate()
 
     def set_inactive_bg_colour(self, val):
         self.kwargs_["inactiveColour"] = val
@@ -94,17 +102,17 @@ class ButtonW:
         )
 
     def on_click(self, func):
-        self.kwargs_["onClick"] = func
+        self.ad["onClick"] = func
         self.recreate()
 
     def on_click_params(self, params):
-        self.kwargs_["onClickParams"] = params
+        self.ad["onClickParams"] = params
         self.recreate()
 
     def disconnect_on_click(self):
-        self.kwargs_["onClick"] = lambda: None
-        if "onClickParams" in self.kwargs_:
-            del self.kwargs_["onClickParams"]
+        self.ad["onClick"] = lambda: None
+        if "onClickParams" in self.ad:
+            del self.ad["onClickParams"]
         self.recreate()
 
     def on_hover(self, func):
@@ -143,6 +151,7 @@ class ButtonW:
     def corner(self, value):
         self.args_[1] = value[0]
         self.args_[2] = value[1]
+        self._corner = [value[0], value[1]]
         self.recreate()
 
     @property
@@ -216,8 +225,20 @@ class ButtonW:
 
     def disable(self):
         self.button.disable()
+        self._is_disabled = True
 
     def enable(self):
+        self.button.enable()
+        self._is_disabled = True
+
+    def hide(self):
+        self._is_hidden = True
+        self.button.hide()
+        self.button.disable()
+
+    def show(self):
+        self._is_hidden = False
+        self.button.show()
         self.button.enable()
 
     def input_processing(self, events, events_p):
@@ -225,7 +246,17 @@ class ButtonW:
         pressed_buttons = events_p[1]
         pressed_keys = events_p[2]
         dx, dy = events_p[3]
-        self.mouse_coards = mousepos
+        if not self._is_disabled and not self._is_hidden:
+            self.mouse_coards = mousepos
+            for event in events:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == pygame.BUTTON_LEFT and self.is_hover:
+                        if "onClick" in self.ad:
+                            if "onClickParams" in self.ad:
+                                self.ad["onClick"](*self.ad["onClickParams"])
+                            else:
+                                self.ad["onClick"]()
 
     def draw(self, sc):
-        sc.blit(self.surf, (0, 0))
+        if not self._is_hidden:
+            sc.blit(self.surf, (0, 0))

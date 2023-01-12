@@ -42,9 +42,10 @@ class Chess:
 
 
 TIMER_EVENT_20TPS = pygame.USEREVENT + 1
+TIMER_EVENT_10TPS = pygame.USEREVENT + 2
 
 # Screen
 RESOLUTION = 1600, 900
-FPS = 120
+FPS = 60
 NAME = "chess"
 BG = ColoursRGB.DARKGREY

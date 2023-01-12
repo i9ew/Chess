@@ -103,7 +103,7 @@ class Figure(pygame.sprite.Sprite):
         self.image = load_image(self.image_path)
 
     def get_figure_path(self):
-        return os.getcwd() + rf"\data\assets\figure_styles\{self.style}\{'w' if self.color == Chess.WHITE_FIGURE else 'b'}{self.letter}.png"
+        return create_full_path(rf"/data/assets/figure_styles/{self.style}/{'w' if self.color == Chess.WHITE_FIGURE else 'b'}{self.letter}.png")
 
     def set_coards(self, coards):
         self.coards = coards
