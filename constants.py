@@ -1,3 +1,6 @@
+import pygame
+
+
 class Colour:
     def __init__(self, r, g, b):
         self.rgb = [r, g, b]
@@ -37,6 +40,8 @@ class Chess:
     MATE = 5
     STALEMATE = 6
 
+
+TIMER_EVENT_20TPS = pygame.USEREVENT + 1
 
 # Screen
 RESOLUTION = 1600, 900

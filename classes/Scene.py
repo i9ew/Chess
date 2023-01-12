@@ -34,26 +34,12 @@ class Scene:
 
     def input_processing(self, events, events_p):
         for el in self.elements:
-            if self.error_protection:
-                try:
-                    el.input_processing(events, events_p)
-                except AttributeError:
-                    pass
-                except Exception as err:
-                    raise err
-            else:
+            if "input_processing" in dir(el):
                 el.input_processing(events, events_p)
 
     def update(self):
         for el in self.elements:
-            if self.error_protection:
-                try:
-                    el.update()
-                except AttributeError:
-                    pass
-                except Exception as err:
-                    raise err
-            else:
+            if "update" in dir(el):
                 el.update()
         if self.bg_image_path is not None:
             im = load_image(self.bg_image_path)
@@ -65,14 +51,7 @@ class Scene:
         if self.bg_image is not None:
             screen.blit(self.bg_image, (0, 0))
         for el in self.elements:
-            if self.error_protection:
-                try:
-                    el.draw(screen)
-                except AttributeError:
-                    pass
-                except Exception as err:
-                    raise err
-            else:
+            if "draw" in dir(el):
                 el.draw(screen)
 
     def disable(self):

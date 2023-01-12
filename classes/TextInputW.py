@@ -1,0 +1,115 @@
+import pygame_textinput
+import pygame
+from functions import *
+
+
+class TextInputW:
+    def __init__(self, corner, rect, initial=""):
+        self.rect_ = rect
+        self.corner = corner
+        self.font = pygame.font.SysFont("arial", self.rect[1])
+        self.value = ""
+        self.inital = initial
+        self.manager = pygame_textinput.TextInputManager(
+            validator=lambda inp: self._add_text(inp))
+        self.pasmanager = pygame_textinput.TextInputManager(
+            validator=lambda inp: self._add_text(inp))
+        self.textinput = pygame_textinput.TextInputVisualizer(manager=self.manager)
+        self.pass_input = None
+        self.surf = pygame.Surface(self.rect, pygame.SRCALPHA)
+        self.bg_color = (0, 0, 0, 0)
+        self.textinput.font_object = self.font
+        self.value = ""
+        self.is_password_ = False
+        self._call_from_pass_input = False
+        self.textinput_value = None
+        self.is_rgb_ = False
+
+    @property
+    def is_rgb(self):
+        return self.is_rgb_
+
+    @is_rgb.setter
+    def is_rgb(self, value):
+        if value and not self.is_rgb_:
+            self.is_rgb_ = value
+            self.textinput.font_color = [0, 85, 170]
+        elif not value and self.is_rgb_:
+            self.is_rgb_ = value
+
+    @property
+    def is_password(self):
+        return self.is_password_
+
+    @is_password.setter
+    def is_password(self, value):
+        self.is_password_ = value
+        if self.is_password_:
+            self.pass_input = pygame_textinput.TextInputVisualizer(manager=self.pasmanager)
+        else:
+            self.pass_input = None
+
+    def is_in_box(self, text):
+        return self.font.size(text)[0] < self.rect[0]
+
+    def _add_text(self, text):
+        self.textinput_value = None
+        if not self._call_from_pass_input:
+            if self.is_password:
+                self.textinput_value = "*" * len(self.pass_input.value)
+                return False
+            else:
+                t = text
+                is_in_box = self.is_in_box(t)
+                if is_in_box:
+                    self.value = text
+                    self.textinput_value = text
+                return False
+        else:
+            t = "*" * len(text)
+            is_in_box = self.is_in_box(t)
+            self.value = text
+            return is_in_box
+
+    @property
+    def rect(self):
+        return self.rect_
+
+    @rect.setter
+    def rect(self, value):
+        self.rect_ = value
+        self.font = pygame.font.SysFont("arial", self.rect[1])
+
+    def input_processing(self, events, events_p):
+        mousepos = events_p[0]
+        pressed_buttons = events_p[1]
+        pressed_keys = events_p[2]
+        dx, dy = events_p[3]
+
+        for event in events:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                print(f"Input: {self.value}")
+            if event.type == TIMER_EVENT_20TPS:
+                if self.is_rgb:
+                    self.textinput.font_color = [(c + 10) % 255 for c in self.textinput.font_color]
+            if event.type == pygame.KEYDOWN:
+                if not self.value:
+                    self.textinput.value = ""
+
+        if self.pass_input is not None:
+            self._call_from_pass_input = True
+            self.pass_input.update(events)
+            self._call_from_pass_input = False
+            self.value = self.pass_input.value
+        self.textinput.update(events)
+        if self.textinput_value is not None:
+            self.textinput.value = self.textinput_value
+            self.manager.cursor_pos = len(self.textinput.value)
+
+        if not self.value:
+            self.textinput.value = self.inital
+
+    def draw(self, screen):
+        self.surf.fill(self.bg_color)
+        self.surf.blit(self.textinput.surface, [0, 0])
+        screen.blit(self.surf, self.corner)

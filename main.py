@@ -28,6 +28,8 @@ class Game:
         start = (0, 0)
         mousepos = (0, 0)
 
+        pygame.time.set_timer(TIMER_EVENT_20TPS, 1000 // 20)
+
         while running:
             screen.fill(ColoursRGB.BLACK.rgb)
             events = pygame.event.get()
