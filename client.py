@@ -2,6 +2,7 @@ import sqlite3
 
 
 def registration(mail, password, login):
+
     def duplicate(mail):
         base = sqlite3.connect('sqlbase')
         cur = base.cursor()
@@ -23,7 +24,7 @@ def registration(mail, password, login):
                     mail.count('.') > 1):
                 return False
         return True
-            
+
     def chek2(password):
         if len(password) < 8:
             return False
@@ -53,17 +54,20 @@ def vhod(mail, password):
     inf1 = [[str(i[0]), str(i[1])] for i in information]
     inf2 = [[str(i[2]), str(i[1])] for i in information]
     if [mail, password] not in inf1 and [mail, password] not in inf2:
-        return 'Пользователь не найден'
-    else:      
+        if mail not in [i[0] for i in inf1] and mail not in [i[0] for i in inf2]:
+            return 'Пользователь не найден'
+        else:
+            return 'Пароль неверный'
+    else:
         if [mail, password] in inf1:
             flag = inf1.index([mail, password])
         else:
             flag = inf2.index([mail, password])
         with open('username.txt', 'w') as f:
             print(f'user={information[flag][2]}', file=f)
+    return True
 
 
 def razlogin():
     with open('username.txt', 'w') as f:
         print(f'user=None', file=f)
-        
