@@ -1,6 +1,7 @@
 import pygame_textinput
 
 from functions import *
+from time import time
 
 
 class TextInputW:
@@ -30,6 +31,7 @@ class TextInputW:
         self.text_color = [0, 0, 0, 255]
         self.rgb_text_color = [0, 85, 170]
         self.selected = False
+        self.last_time_typed = time()
 
     def hide(self):
         self._is_hidden = True
@@ -83,6 +85,9 @@ class TextInputW:
             self.value = text
             return is_in_box
 
+    def get_time_from_last_type(self):
+        return time() - self.last_time_typed
+
     @property
     def rect(self):
         return self.rect_
@@ -124,6 +129,7 @@ class TextInputW:
             del self.functions["onValueChangedParams"]
 
     def _on_value_changed_process(self):
+        self.last_time_typed = time()
         if "onValueChanged" in self.functions:
             if "onValueChangedParams" in self.functions:
                 self.functions["onValueChanged"](*self.functions["onValueChangedParams"])

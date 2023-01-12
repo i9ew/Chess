@@ -1,8 +1,7 @@
+import os
 from os import listdir
 
-from constants import *
 from functions import *
-import os
 
 
 class AnimationW:
@@ -25,8 +24,11 @@ class AnimationW:
         self._is_hidden = False
 
     def play_cycle(self):
-        self.show()
+        self.frame_index = self.start_from_frame
         self._play = True
+        self.show()
+        self.image = load_image(os.path.join(self.path_to_files, f"{self.frame_index}.png"))
+        self.image = pygame.transform.scale(self.image, (self.size, self.size))
 
     def next_frame(self):
         if self.frame_index == self.start_from_frame - 1:
@@ -42,7 +44,7 @@ class AnimationW:
 
     def draw(self, sc):
         if not self._is_hidden:
-            sc.blit(self.image, (0, 0))
+            sc.blit(self.image, self.corner)
 
     def input_processing(self, events, events_p):
         if not self._is_hidden:
