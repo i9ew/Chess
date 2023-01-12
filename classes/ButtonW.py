@@ -206,7 +206,6 @@ class ButtonW:
 
     def update(self):
         self.hover_st = [self.is_hover, self.hover_st[0]]
-
         if self.is_hover and self.draw_text_color != self.hover_text_color:
             self.draw_text_color = self.hover_text_color
         elif not self.is_hover and self.draw_text_color != self.text_color:
@@ -233,13 +232,11 @@ class ButtonW:
 
     def hide(self):
         self._is_hidden = True
-        self.button.hide()
-        self.button.disable()
+        # self.button.hide()
 
     def show(self):
         self._is_hidden = False
-        self.button.show()
-        self.button.enable()
+        # self.button.show()
 
     def input_processing(self, events, events_p):
         mousepos = events_p[0]

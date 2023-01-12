@@ -76,6 +76,10 @@ class ChessGame:
         return self.engine.get_evaluation()
 
     @property
+    def FEN(self):
+        return self.engine.position
+
+    @property
     def last_move(self):
         if self.moves_history:
             return self.moves_history[-1]

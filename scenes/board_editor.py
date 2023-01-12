@@ -5,7 +5,7 @@ from classes.ButtonW import ButtonW
 from classes.ChessGame import ChessGame
 from classes.EvaluationW import EvaluationW
 from classes.Scene import Scene
-from constants import *
+from functions import *
 
 
 class BoardEditor(Scene):
@@ -33,8 +33,18 @@ class BoardEditor(Scene):
         but.on_dishover(lambda: self.show_buf_board(False))
         but.corner = [970, 50]
 
+        but2 = ButtonW("Играть из позиции")
+        but2.text_color = ColoursRGB.LIGHTGREY.rgb
+        but2.set_font("arial", 40)
+        but2.set_inactive_bg_colour((*(self.bg_color * 1.8).rgb, 255))
+        but2.set_hover_bg_colour((*(self.bg_color * 2).rgb, 255))
+        but2.on_click(self.play_from_pos)
+        but2.rect = [400, 150]
+        but2.corner = [1050, 550]
+
         r = EvaluationW([100, 700], [50, 50])
 
+        self.elements.append("play_from", but2, 0)
         self.elements.append("main_board", b, 0)
         self.elements.append("buf_board", b2, 0)
         self.elements.append("set_fen", but, 0)
@@ -64,3 +74,9 @@ class BoardEditor(Scene):
         ev = self.elements[0, "evaluation"]
         board.game.set_position(fen)
         ev.game = board.game
+
+    def play_from_pos(self):
+        board = self.elements[0, "main_board"]
+        if board.game.FEN != "8/8/8/8/8/8/8/8 w - - 0 1":
+            set_param_in_client("playFrom", board.game.FEN)
+            self.scene_manager.goto_scene("game")

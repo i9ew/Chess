@@ -1,4 +1,5 @@
 import os
+
 from constants import *
 
 
@@ -47,6 +48,34 @@ def get_figure(figure: str):
         raise KeyError(f"There is no such figure in chess '{figure}'")
 
 
+def set_param_in_client(param, value):
+    with open('username.txt', 'r') as f:
+        a = f.readlines()
+        flag = False
+        for i in range(len(a)):
+            if a[i].split("=")[0] == param:
+                flag = True
+                a[i] = f"{param}={value}"
+            a[i] = a[i].strip()
+        if not flag:
+            a.append(f"{param}={value}")
+    with open('username.txt', 'w') as f:
+        f.write("\n".join(a))
+
+
+def get_param_from_client(param):
+    with open('username.txt', 'r') as f:
+        a = f.readlines()
+        for i in range(len(a)):
+            if a[i].split("=")[0] == param:
+                return a[i].split("=")[1].strip()
+
+
+def clear_client():
+    with open('username.txt', 'w') as f:
+        f.write("")
+
+
 def import_figures():
     from classes.figures.Pawn import Pawn
     from classes.figures.King import King
@@ -60,6 +89,7 @@ def import_figures():
 
 def create_full_path(path):
     return os.path.join(os.getcwd(), *path.split("/"))
+
 
 def coards_to_indexes(coards):
     sl = {

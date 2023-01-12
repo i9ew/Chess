@@ -7,6 +7,7 @@ from scenes.main_scene import MainScene
 from scenes.second_scene import SecondScene
 from scenes.board_editor import BoardEditor
 from scenes.registration import Registration
+from client import *
 
 
 class Game:
@@ -41,6 +42,8 @@ class Game:
             for event in events:
                 if event.type == pygame.QUIT:
                     running = False
+                    clear_client()
+                    razlogin()
                     # sys.exit()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:

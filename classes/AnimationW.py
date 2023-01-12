@@ -15,7 +15,7 @@ class AnimationW:
         self.surf = pygame.Surface(RESOLUTION, pygame.SRCALPHA)
         self.size = size
         self._is_hidden = False
-        self._play = False
+        self.playing = False
 
     def hide(self):
         self._is_hidden = True
@@ -25,16 +25,16 @@ class AnimationW:
 
     def play_cycle(self):
         self.frame_index = self.start_from_frame
-        self._play = True
+        self.playing = True
         self.show()
         self.image = load_image(os.path.join(self.path_to_files, f"{self.frame_index}.png"))
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
 
     def next_frame(self):
         if self.frame_index == self.start_from_frame - 1:
-            self._play = False
+            self.playing = False
             self.hide()
-        if self._play:
+        if self.playing:
             self.frame_index += 1
             if self.frame_index > self.max_index:
                 self.frame_index = 0

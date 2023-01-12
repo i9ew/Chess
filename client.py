@@ -1,8 +1,8 @@
 import sqlite3
+from functions import *
 
 
 def registration(mail, password, login):
-
     def duplicate(mail):
         base = sqlite3.connect('sqlbase')
         cur = base.cursor()
@@ -63,11 +63,13 @@ def vhod(mail, password):
             flag = inf1.index([mail, password])
         else:
             flag = inf2.index([mail, password])
-        with open('username.txt', 'w') as f:
-            print(f'user={information[flag][2]}', file=f)
-    return True
+        set_param_in_client("user", information[flag][2])
+    return "Успешно"
+
+
+def get_client_name():
+    return get_param_from_client("user")
 
 
 def razlogin():
-    with open('username.txt', 'w') as f:
-        print(f'user=None', file=f)
+    set_param_in_client("user", "None")
