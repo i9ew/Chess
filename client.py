@@ -2,35 +2,72 @@ import sqlite3
 from functions import *
 
 
-def registration(mail, password, login):
-    def duplicate(mail):
-        base = sqlite3.connect('sqlbase')
-        cur = base.cursor()
-        table = cur.execute("""SELECT mail FROM players""")
-        table = [i[0] for i in table]
-        if mail in table:
-            base.close()
-            return False
+def duplicate(mail):
+    base = sqlite3.connect('sqlbase')
+    cur = base.cursor()
+    table = cur.execute("""SELECT mail FROM players""")
+    table = [i[0] for i in table]
+    if mail in table:
         base.close()
-        return True
+        return False
+    base.close()
+    return True
 
-    def chek1(mail):
-        if '@' not in mail or '.' not in mail:
-            return False
-        if mail.index('.') - mail.index('@') < 2 or mail.index('@') == 0 or mail.index('.') + 1 == len(mail):
-            return False
-        for i in mail:
-            if (i != '!' and not i.isalpha() and i != '@' and not i.isdigit() and i != '.' or mail.count('@') > 1 or
-                    mail.count('.') > 1):
-                return False
-        return True
 
-    def chek2(password):
-        if len(password) < 8:
-            return False
-        return True
+def duplicatelog(login):
+    base = sqlite3.connect('sqlbase')
+    cur = base.cursor()
+    table = cur.execute("""SELECT login FROM players""")
+    table = [i[0] for i in table]
+    if login in table:
+        base.close()
+        return False
+    base.close()
+    return True
 
-    if duplicate(mail) and chek1(mail) and chek2(password):
+def log_check(log):
+    if len(log) < 4:
+        return False
+    return True
+
+def log_check2(log):
+    if len(log) > 9:
+        return False
+    return True
+
+
+def chek1(mail):
+    if '@' not in mail or '.' not in mail:
+        return False
+    if mail.index('.') - mail.index('@') < 2 or mail.index('@') == 0 or mail.index('.') + 1 == len(mail):
+        return False
+    for i in mail:
+        if (i != '!' and not i.isalpha() and i != '@' and not i.isdigit() and i != '.' or mail.count('@') > 1 or
+                mail.count('.') > 1):
+            return False
+    return True
+
+
+def chek2(password):
+    if len(password) < 8:
+        return False
+    return True
+
+
+def registration(mail, password, login):
+    if not chek2(password):
+        return 'Короткий пароль'
+    elif not duplicate(mail):
+        return 'Почта уже есть'
+    elif not chek1(mail):
+        return 'Почта не коректна'
+    elif not duplicatelog(login):
+        return 'Логин занят'
+    elif not log_check(login):
+        return 'Логин должен быть длиннее 4'
+    elif not log_check2(login):
+        return 'Логин должен быть короче 9'
+    else:
         base = sqlite3.connect('sqlbase')
         cur = base.cursor()
         cur.execute("""INSERT INTO players (mail, password, login, settings) VALUES 
@@ -38,12 +75,23 @@ def registration(mail, password, login):
         base.commit()
         base.close()
         return 'Успешно'
-    elif not duplicate(mail):
-        return 'Почта уже есть'
-    elif not chek1(mail):
-        return 'Почта бяка'
-    else:
+
+
+def try_to_registr(mail, password, login):
+    if not chek2(password):
         return 'Короткий пароль'
+    elif not duplicate(mail):
+        return 'Почта занята'
+    elif not chek1(mail):
+        return 'Почта некорректна'
+    elif not duplicatelog(login):
+        return 'Логин занят'
+    elif not log_check(login):
+        return 'Логин должен быть длиннее 4'
+    elif not log_check2(login):
+        return 'Логин должен быть короче 9'
+    else:
+        return 'Всё корректно'
 
 
 def vhod(mail, password):

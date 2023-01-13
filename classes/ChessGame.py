@@ -3,6 +3,7 @@ import chess
 from classes.FEN import FEN
 from classes.StockfishM import StockfishEngine
 from constants import *
+from constants import Chess as ChessC
 
 
 class ChessGame:
@@ -40,12 +41,16 @@ class ChessGame:
         return self.engine.stockfish.is_fen_valid(fen_pos)
 
     def set_position(self, fen_pos):
-        for board in self.play_on_boards:
-            board.unselect_all()
-            board.set_FEN_position(fen_pos)
         self.engine.set_FEN_position(fen_pos)
         self.board.set_board_fen(fen_pos.split()[0])
         self.evaluation = self.get_evaluation()
+        for board in self.play_on_boards:
+            board.unselect_all()
+            board.set_FEN_position(fen_pos)
+            try:
+                board.isreversed = True if self.turn == ChessC.BLACK_FIGURE else False
+            except:
+                pass
 
     def make_move(self, from_sqare, to_square):
         move = ""
@@ -54,11 +59,15 @@ class ChessGame:
         move += f"{move_l}{from_sqare}-{to_square}"
         self.pos_history.append(self.engine.position)
         self.engine.make_move(from_sqare, to_square)
-        for board in self.play_on_boards:
-            board.set_FEN_position(self.engine.position)
-        print(self.play_on_boards[0])
         self.board.set_board_fen(self.engine.position.split()[0])
         self.board.turn = self.turn
+        for board in self.play_on_boards:
+            board.set_FEN_position(self.engine.position)
+            try:
+                board.isreversed = True if self.turn == ChessC.BLACK_FIGURE else False
+            except:
+                pass
+        print(self.play_on_boards[0])
         if self.is_mate:
             move += "#"
         elif self.is_check:

@@ -77,6 +77,14 @@ class BoardEditor(Scene):
 
     def play_from_pos(self):
         board = self.elements[0, "main_board"]
-        if board.game.FEN != "8/8/8/8/8/8/8/8 w - - 0 1":
+        if board.game.FEN != "8/8/8/8/8/8/8/8 w - - 0 1" and board.game.FEN:
+            print(board.game.FEN)
             set_param_in_client("playFrom", board.game.FEN)
             self.scene_manager.goto_scene("game")
+
+    def input_processing(self, events, events_p):
+        super().input_processing(events, events_p)
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.scene_manager.goto_scene("menu")

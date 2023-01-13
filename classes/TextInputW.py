@@ -8,7 +8,7 @@ class TextInputW:
     def __init__(self, corner, rect, initial=""):
         self.rect_ = rect
         self.corner = corner
-        self.font = pygame.font.SysFont("arial", int(self.rect[1] * 0.9))
+        self.font = pygame.font.SysFont("arial", int(self.rect[1] * 0.8))
         self.value = ""
         self.inital = initial
         self.manager = pygame_textinput.TextInputManager(

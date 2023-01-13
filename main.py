@@ -6,7 +6,8 @@ from constants import *
 from scenes.main_scene import MainScene
 from scenes.second_scene import SecondScene
 from scenes.board_editor import BoardEditor
-from scenes.registration import Registration
+from scenes.Registration import Registration
+from scenes.screamer import Screamer
 from client import *
 
 
@@ -23,7 +24,8 @@ class Game:
         pygame.display.set_caption(self.name)
         clock = pygame.time.Clock()
         running = True
-        scenes = {"game": MainScene, "menu": SecondScene, "board_editor": BoardEditor, "register": Registration}
+        scenes = {"game": MainScene, "menu": SecondScene, "board_editor": BoardEditor, "register": Registration,
+                  "screamer": Screamer}
         scene_manager = SceneManeger(scenes)
         scene_manager.goto_scene("menu")
         dx = dy = 0
@@ -42,8 +44,9 @@ class Game:
             for event in events:
                 if event.type == pygame.QUIT:
                     running = False
+                    name = get_client_name()
                     clear_client()
-                    razlogin()
+                    set_param_in_client("user", name)
                     # sys.exit()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -53,7 +56,6 @@ class Game:
                 if event.type == pygame.MOUSEMOTION:
                     mousepos = event.pos
                     dx, dy = mousepos[0] - start[0], mousepos[1] - start[1]
-
             scene_manager.process_scene(screen, events, [mousepos, pressed_buttons, pressed_keys, [dx, dy]])
             pygame.display.update()
             pw.update(events)

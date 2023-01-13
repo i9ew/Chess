@@ -32,14 +32,14 @@ class SecondScene(Scene):
         but2.rect = [300, 300]
         but2.corner = [(RESOLUTION[0] - but2.rect[0]) // 2, (RESOLUTION[1] - but2.rect[1]) // 2]
 
-        log_rect = RectW((*(self.bg_color * 1.8).rgb, 255), [1100, 300], [400, 300], radius=50)
+        log_rect = RectW((*(self.bg_color * 1.8).rgb, 255), [1100, 300], [450, 300], radius=50)
         bg_decor_rect = RectW((*(self.bg_color * 1.8).rgb, 255), [300, 250], [700, 400], radius=50)
 
-        self.log = TextInputW([35, 100], [330, 50], initial="Логин:")
+        self.log = TextInputW([35, 100], [380, 50], initial="Логин:")
         self.log.bg_color = (ColoursRGB.WHITE * 0.7).rgb
         self.log.is_rgb = False
 
-        self.pas = TextInputW([35, 170], [330, 50], initial="Пароль:")
+        self.pas = TextInputW([35, 170], [380, 50], initial="Пароль:")
         self.pas.bg_color = (ColoursRGB.WHITE * 0.7).rgb
         self.pas.is_password = True
         self.pas.is_rgb = True
@@ -47,9 +47,9 @@ class SecondScene(Scene):
         self.log.on_value_changed(self._reset_alredy_called_login)
         self.pas.on_value_changed(self._reset_alredy_called_login)
 
-        self.pls_login = TextW("Вход", [30, 20], ColoursRGB.LIGHTGREY.rgb, ["arialblack", 40])
+        self.pls_login = TextW("Вход/Регистрация", [30, 20], ColoursRGB.LIGHTGREY.rgb, ["arialblack", 35])
         self.verdict1 = TextW("Неверный пароль", [20, 230], ColoursRGB.RED.rgb, ["arialblack", 20])
-        self.verdict2 = TextW("Нажмите, чтобы зарегистрировать аккуант", [20, 240], ColoursRGB.RED.rgb,
+        self.verdict2 = TextW("Нажмите, чтобы зарегистрировать аккуант", [36, 240], ColoursRGB.RED.rgb,
                               ["arialblack", 15])
 
         self.verdict3 = TextW("User", [100, 10], ColoursRGB.LIGHTGREY.rgb,
@@ -61,13 +61,14 @@ class SecondScene(Scene):
         self.verdict31.hover_text_color = (ColoursRGB.LIGHTGREY * 1.8).rgb
 
         self.verdict2.hover_text_color = (ColoursRGB.RED * 0.7).rgb
-        self.verdict2.on_click(lambda: self.scene_manager.goto_scene("register"))
+        self.verdict2.on_click(self.go_to_register)
         self.verdict1.hide()
         self.verdict2.hide()
         self.verdict3.hide()
         self.verdict31.hide()
         path = create_full_path(r"/data/assets/animations/checkbox_alpha")
-        self.anim = AnimationW(path, [40, 0], 300)
+
+        self.anim = AnimationW(path, [70, 0], 300)
         log_rect.widgets.append("an", self.anim, 2)
 
         # log_rect.widgets.append("galochka", verdict3, 2)
@@ -83,30 +84,47 @@ class SecondScene(Scene):
         self.elements.append("start_game_button", but, 0)
         self.elements.append("board_editor_button", but2, 0)
 
+    def go_to_register(self):
+        log = self.log.get_text()
+        pas = self.pas.get_text()
+        set_param_in_client("regWithLog", log)
+        set_param_in_client("regWithPas", pas)
+        self.scene_manager.goto_scene("register")
+
     def update(self):
         super().update()
-        if self.log.get_text() and self.log.get_time_from_last_type() > 1 \
-                and self.pas.get_text() and self.pas.get_time_from_last_type() > 1 and not self._alredy_called_login:
-            self._alredy_called_login = True
-            log = self.log.get_text()
-            pas = self.pas.get_text()
-            verdict = vhod(log, pas)
-            if verdict == "Успешно":
-                self.log.hide()
-                self.pas.hide()
-                self.pls_login.hide()
-                self.anim.play_cycle()
-                self.playing_animation = True
+        if get_param_from_client("user") != "None" and not self.playing_animation:
+            self.show_loged_in()
+        else:
+            if self.log.get_text() and self.log.get_time_from_last_type() > 1 \
+                    and self.pas.get_text() and self.pas.get_time_from_last_type() > 1 and not self._alredy_called_login:
+                self._alredy_called_login = True
+                log = self.log.get_text()
+                pas = self.pas.get_text()
+                verdict = vhod(log, pas)
+                if verdict == "Успешно":
+                    self.log.hide()
+                    self.pas.hide()
+                    self.pls_login.hide()
+                    self.anim.play_cycle()
+                    self.playing_animation = True
 
-            if verdict == "Пароль неверный":
-                self.verdict1.show()
-            if verdict == 'Пользователь не найден':
-                self.verdict2.show()
-        if self.playing_animation and not self.anim.playing:
-            self.playing_animation = False
-            self.verdict3.show()
+                if verdict == "Пароль неверный":
+                    self.verdict1.show()
+                if verdict == 'Пользователь не найден':
+                    self.verdict2.show()
+            if self.playing_animation and not self.anim.playing:
+                self.show_loged_in()
+
+    def show_loged_in(self):
+        self.log.hide()
+        self.pas.hide()
+        self.pls_login.hide()
+        self.playing_animation = False
+        self.verdict3.show()
+        if self.verdict3.text != get_client_name():
             self.verdict3.text = get_client_name()
-            self.verdict31.show()
+        self.verdict31.show()
 
     def _reset_alredy_called_login(self):
         self.verdict1.hide()

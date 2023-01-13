@@ -76,6 +76,7 @@ def clear_client():
         f.write("")
 
 
+
 def import_figures():
     from classes.figures.Pawn import Pawn
     from classes.figures.King import King
