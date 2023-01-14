@@ -1,5 +1,3 @@
-import os
-
 from constants import *
 
 
@@ -49,7 +47,7 @@ def get_figure(figure: str):
 
 
 def set_param_in_client(param, value):
-    with open('username.txt', 'r') as f:
+    with open(user_path, 'r') as f:
         a = f.readlines()
         flag = False
         for i in range(len(a)):
@@ -59,12 +57,12 @@ def set_param_in_client(param, value):
             a[i] = a[i].strip()
         if not flag:
             a.append(f"{param}={value}")
-    with open('username.txt', 'w') as f:
+    with open(user_path, 'w') as f:
         f.write("\n".join(a))
 
 
 def get_param_from_client(param):
-    with open('username.txt', 'r') as f:
+    with open(user_path, 'r') as f:
         a = f.readlines()
         for i in range(len(a)):
             if a[i].split("=")[0] == param:
@@ -72,9 +70,8 @@ def get_param_from_client(param):
 
 
 def clear_client():
-    with open('username.txt', 'w') as f:
+    with open(user_path, 'w') as f:
         f.write("")
-
 
 
 def import_figures():

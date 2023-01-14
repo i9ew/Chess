@@ -1,9 +1,10 @@
 import sqlite3
+
 from functions import *
 
 
 def duplicate(mail):
-    base = sqlite3.connect('sqlbase')
+    base = sqlite3.connect(base_path)
     cur = base.cursor()
     table = cur.execute("""SELECT mail FROM players""")
     table = [i[0] for i in table]
@@ -15,7 +16,7 @@ def duplicate(mail):
 
 
 def duplicatelog(login):
-    base = sqlite3.connect('sqlbase')
+    base = sqlite3.connect(base_path)
     cur = base.cursor()
     table = cur.execute("""SELECT login FROM players""")
     table = [i[0] for i in table]
@@ -25,10 +26,12 @@ def duplicatelog(login):
     base.close()
     return True
 
+
 def log_check(log):
     if len(log) < 4:
         return False
     return True
+
 
 def log_check2(log):
     if len(log) > 9:
@@ -68,7 +71,7 @@ def registration(mail, password, login):
     elif not log_check2(login):
         return 'Логин должен быть короче 9'
     else:
-        base = sqlite3.connect('sqlbase')
+        base = sqlite3.connect(base_path)
         cur = base.cursor()
         cur.execute("""INSERT INTO players (mail, password, login, settings) VALUES 
                         (?, ?, ?, ?)""", [mail, password, login, ''])
@@ -95,7 +98,7 @@ def try_to_registr(mail, password, login):
 
 
 def vhod(mail, password):
-    base = sqlite3.connect('sqlbase')
+    base = sqlite3.connect(base_path)
     cur = base.cursor()
     information = cur.execute("""SELECT * FROM players""")
     information = [[str(i[0]), str(i[1]), str(i[2])] for i in information]

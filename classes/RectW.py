@@ -3,7 +3,6 @@ from functions import *
 from classes.Element import Elements
 
 
-
 class RectW:
     def __init__(self, color, corner, rect, radius=0):
         self.color = color

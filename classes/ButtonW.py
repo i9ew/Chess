@@ -1,4 +1,3 @@
-import pygame
 from pygame_widgets.button import Button
 
 from functions import *
@@ -49,6 +48,9 @@ class ButtonW:
         )
         self._is_hidden = False
         self._is_disabled = False
+
+    def is_b_hidden(self):
+        return self._is_hidden
 
     @property
     def font(self):
@@ -198,7 +200,9 @@ class ButtonW:
 
     @property
     def is_hover(self):
-        return self.button.contains(self.mouse_coards[0], self.mouse_coards[1])
+        params = self.corner, self.mouse_coards, [self.corner[0] + self.rect[0], self.corner[1] + self.rect[1]]
+        return inRange(*params)
+        # return self.button.contains(self.mouse_coards[0], self.mouse_coards[1])
 
     def set_arg(self, arg, value):
         self.kwargs_[arg] = value

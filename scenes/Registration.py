@@ -43,7 +43,7 @@ class Registration(Scene):
         but2 = ButtonW("Зарегистрироваться")
         but2.text_color = ColoursRGB.LIGHTGREY.rgb
         but2.set_font("arial", 40)
-        but2.corner = [640, 583]
+        but2.corner = [615, 583]
         but2.set_default_rect()
         but2.on_click(self.try_to_reg)
         but2.set_hover_bg_colour([*(self.bg_color * 2).rgb, 255])

@@ -45,7 +45,6 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
                     name = get_client_name()
-                    clear_client()
                     set_param_in_client("user", name)
                     # sys.exit()
 

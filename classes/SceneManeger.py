@@ -2,7 +2,7 @@ class SceneManeger:
     def __init__(self, scenes):
         self.scenes = scenes
         self.activeScene = None
-        self.error_protection = True
+        self.error_protection = False
 
     def process_scene(self, screen, events, events_p):
         if self.error_protection:

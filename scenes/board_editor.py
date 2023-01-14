@@ -14,7 +14,7 @@ class BoardEditor(Scene):
         print("---b_scene---")
         self.bg_color = ColoursRGB.LICHESS2
         b = Board()
-        b.watch_mode = True
+        b.watch_mode = False
         b.corner = [200, 37]
         b.game = ChessGame("8/8/8/8/8/8/8/8 w - - 0 1")
 
@@ -79,7 +79,8 @@ class BoardEditor(Scene):
         board = self.elements[0, "main_board"]
         if board.game.FEN != "8/8/8/8/8/8/8/8 w - - 0 1" and board.game.FEN:
             print(board.game.FEN)
-            set_param_in_client("playFrom", board.game.FEN)
+            set_param_in_client("playFromBE", board.game.FEN)
+            set_param_in_client("playFrom", "")
             self.scene_manager.goto_scene("game")
 
     def input_processing(self, events, events_p):
