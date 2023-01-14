@@ -119,7 +119,10 @@ def vhod(mail, password):
 
 
 def get_client_name():
-    return get_param_from_client("user")
+    a = get_param_from_client("user")
+    if a == "":
+        a = "None"
+    return a
 
 
 def razlogin():

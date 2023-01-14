@@ -47,6 +47,8 @@ def get_figure(figure: str):
 
 
 def set_param_in_client(param, value):
+    with open(user_path, 'w') as f:
+        pass
     with open(user_path, 'r') as f:
         a = f.readlines()
         flag = False
@@ -62,6 +64,8 @@ def set_param_in_client(param, value):
 
 
 def get_param_from_client(param):
+    with open(user_path, 'w') as f:
+        pass
     with open(user_path, 'r') as f:
         a = f.readlines()
         for i in range(len(a)):
