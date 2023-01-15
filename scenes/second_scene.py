@@ -93,7 +93,7 @@ class SecondScene(Scene):
 
     def update(self):
         super().update()
-        if get_client_name() and not self.playing_animation:
+        if get_client_name() != "None" and not self.playing_animation:
             self.show_loged_in()
         else:
             if self.log.get_text() and self.log.get_time_from_last_type() > 1 \

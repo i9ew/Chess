@@ -1,3 +1,5 @@
+import sys
+
 from constants import *
 
 
@@ -47,10 +49,12 @@ def get_figure(figure: str):
 
 
 def set_param_in_client(param, value):
+    try:
+        with open(user_path, 'r') as f:
+            a = f.readlines()
+    except:
+        a = []
     with open(user_path, 'w') as f:
-        pass
-    with open(user_path, 'r') as f:
-        a = f.readlines()
         flag = False
         for i in range(len(a)):
             if a[i].split("=")[0] == param:
@@ -59,18 +63,18 @@ def set_param_in_client(param, value):
             a[i] = a[i].strip()
         if not flag:
             a.append(f"{param}={value}")
-    with open(user_path, 'w') as f:
-        f.write("\n".join(a))
+        f.writelines("\n".join(a))
 
 
 def get_param_from_client(param):
-    with open(user_path, 'w') as f:
-        pass
-    with open(user_path, 'r') as f:
-        a = f.readlines()
-        for i in range(len(a)):
-            if a[i].split("=")[0] == param:
-                return a[i].split("=")[1].strip()
+    try:
+        with open(user_path, 'r') as f:
+            a = f.readlines()
+            for i in range(len(a)):
+                if a[i].split("=")[0] == param:
+                    return a[i].split("=")[1].strip()
+    except:
+        return None
 
 
 def clear_client():
@@ -90,7 +94,10 @@ def import_figures():
 
 
 def create_full_path(path):
-    return os.path.join(os.getcwd(), *path.split("/"))
+    splited_p = path.split("/")
+    if hasattr(sys, "_MEIPASS") and FILES_ARE_SAVING_TO_APPDATA:
+        return os.path.join(sys._MEIPASS, *splited_p)
+    return os.path.join(*splited_p)
 
 
 def coards_to_indexes(coards):

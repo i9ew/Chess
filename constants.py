@@ -1,5 +1,7 @@
-import pygame
 import os
+
+import pygame
+
 
 class Colour:
     def __init__(self, r, g, b):
@@ -44,9 +46,10 @@ class Chess:
 TIMER_EVENT_20TPS = pygame.USEREVENT + 1
 TIMER_EVENT_10TPS = pygame.USEREVENT + 2
 
-user_path = os.path.join(os.getcwd(), "data", "username.txt")
-base_path = os.path.join(os.getcwd(), "data", "sqlbase")
-
+# files
+user_path = os.path.join("data", "username.txt")
+base_path = os.path.join("data", "sqlbase")
+FILES_ARE_SAVING_TO_APPDATA = False
 
 # Screen
 RESOLUTION = 1600, 900

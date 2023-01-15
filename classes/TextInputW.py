@@ -15,7 +15,7 @@ class TextInputW:
             validator=lambda inp: self._add_text(inp))
         self.pasmanager = pygame_textinput.TextInputManager(
             validator=lambda inp: self._add_text(inp))
-        self.textinput = pygame_textinput.TextInputVisualizer(manager=self.manager)
+        self.textinput = pygame_textinput.TextInputVisualizer(manager=self.manager, font_object=self.font)
         self.pass_input = None
         self.surf = pygame.Surface(self.rect, pygame.SRCALPHA)
         self.bg_color = (0, 0, 0, 0)
@@ -59,7 +59,7 @@ class TextInputW:
     def is_password(self, value):
         self.is_password_ = value
         if self.is_password_:
-            self.pass_input = pygame_textinput.TextInputVisualizer(manager=self.pasmanager)
+            self.pass_input = pygame_textinput.TextInputVisualizer(manager=self.pasmanager, font_object=self.font)
         else:
             self.pass_input = None
 

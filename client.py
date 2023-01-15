@@ -114,13 +114,13 @@ def vhod(mail, password):
             flag = inf1.index([mail, password])
         else:
             flag = inf2.index([mail, password])
-        set_param_in_client("user", information[flag][2])
+    set_param_in_client("user", information[flag][2])
     return "Успешно"
 
 
 def get_client_name():
     a = get_param_from_client("user")
-    if a == "":
+    if a in ["", None, "None"]:
         a = "None"
     return a
 
