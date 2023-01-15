@@ -46,7 +46,7 @@ def chek1(mail):
         return False
     for i in mail:
         if (i != '!' and not i.isalpha() and i != '@' and not i.isdigit() and i != '.' or mail.count('@') > 1 or
-                mail.count('.') > 1):
+                mail.count('.') > 1 and i not in "_-"):
             return False
     return True
 
