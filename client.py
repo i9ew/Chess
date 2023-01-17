@@ -3,6 +3,47 @@ import sqlite3
 from functions import *
 
 
+def table():
+    base = sqlite3.connect(base_path)
+    cur = base.cursor()
+    cur.execute('''SELECT count(name) FROM sqlite_master WHERE type = 'table' AND name = 'players' ''')
+    if cur.fetchone()[0] == 1:
+        base.close()
+    else:
+        cur = base.cursor()
+        cur.execute('''PRAGMA foreign_keys = 0;
+
+CREATE TABLE sqlitestudio_temp_table AS SELECT *
+                                          FROM players;
+
+DROP TABLE players;
+
+CREATE TABLE players (
+    mail     STRING PRIMARY KEY,
+    password STRING,
+    login    STRING,
+    settings STRING
+);
+
+INSERT INTO players (
+                        mail,
+                        password,
+                        login,
+                        settings
+                    )
+                    SELECT mail,
+                           password,
+                           login,
+                           settings
+                      FROM sqlitestudio_temp_table;
+
+DROP TABLE sqlitestudio_temp_table;
+
+PRAGMA foreign_keys = 1;''')
+        base.commit()
+        base.close()
+
+
 def duplicate(mail):
     base = sqlite3.connect(base_path)
     cur = base.cursor()
@@ -58,6 +99,7 @@ def chek2(password):
 
 
 def registration(mail, password, login):
+    table()
     if not chek2(password):
         return 'Короткий пароль'
     elif not duplicate(mail):
@@ -81,6 +123,7 @@ def registration(mail, password, login):
 
 
 def try_to_registr(mail, password, login):
+    table()
     if not chek2(password):
         return 'Короткий пароль'
     elif not duplicate(mail):
@@ -98,6 +141,7 @@ def try_to_registr(mail, password, login):
 
 
 def vhod(mail, password):
+    table()
     base = sqlite3.connect(base_path)
     cur = base.cursor()
     information = cur.execute("""SELECT * FROM players""")
