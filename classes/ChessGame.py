@@ -16,7 +16,7 @@ class ChessGame:
         self.board = chess.Board(self.FEN_position)
         self.pos_history = []
         self.moves_history = []
-        self.evaluation = None
+        self.evaluation = self.get_evaluation() if FEN_position else None
 
     def move_request(self, from_sqare, to_square):
         fig = self.play_on_boards[0].get_from_sqare(from_sqare)
@@ -44,6 +44,7 @@ class ChessGame:
         self.engine.set_FEN_position(fen_pos)
         self.board.set_board_fen(fen_pos.split()[0])
         self.evaluation = self.get_evaluation()
+        self.FEN_position = self.engine.position
         for board in self.play_on_boards:
             board.unselect_all()
             board.set_FEN_position(fen_pos)

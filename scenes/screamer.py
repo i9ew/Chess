@@ -7,7 +7,7 @@ from constants import *
 class Screamer(Scene):
     def __init__(self):
         super().__init__()
-        self.bg_color = ColoursRGB.RED
+        self.bg_color = ColoursRGB.BLACK
         self.bg_image_path = create_full_path(f"data/assets/images/screamer.png")
 
     def input_processing(self, events, events_p):

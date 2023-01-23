@@ -3,6 +3,37 @@ import sqlite3
 from functions import *
 
 
+def table():
+    base = sqlite3.connect(base_path)
+    cur = base.cursor()
+    cur.execute('''SELECT count(name) FROM sqlite_master WHERE type = 'table' AND name = 'players' ''')
+    if cur.fetchone()[0] == 1:
+        base.close()
+    else:
+        try:
+            cur = base.cursor()
+            cur.executescript('''
+                        CREATE TABLE players (
+                            mail     STRING PRIMARY KEY,
+                            password STRING,
+                            login    STRING,
+                            settings STRING
+                        ); 
+                        INSERT INTO players (
+                                                mail,
+                                                password,
+                                                login,
+                                                settings
+                                            )
+                        ''')
+
+            base.commit()
+            base.close()
+        except:
+            base.commit()
+            base.close()
+
+
 def duplicate(mail):
     base = sqlite3.connect(base_path)
     cur = base.cursor()
@@ -45,8 +76,8 @@ def chek1(mail):
     if mail.index('.') - mail.index('@') < 2 or mail.index('@') == 0 or mail.index('.') + 1 == len(mail):
         return False
     for i in mail:
-        if (i != '!' and not i.isalpha() and i != '@' and not i.isdigit() and i != '.' or mail.count('@') > 1 or
-                mail.count('.') > 1 and i not in "_-"):
+        if (i not in "!@._" and not i.isalpha() and not i.isdigit() or mail.count('@') > 1 or
+                mail.count('.') > 1):
             return False
     return True
 
@@ -58,6 +89,7 @@ def chek2(password):
 
 
 def registration(mail, password, login):
+    table()
     if not chek2(password):
         return 'Короткий пароль'
     elif not duplicate(mail):
@@ -81,6 +113,7 @@ def registration(mail, password, login):
 
 
 def try_to_registr(mail, password, login):
+    table()
     if not chek2(password):
         return 'Короткий пароль'
     elif not duplicate(mail):
@@ -98,6 +131,7 @@ def try_to_registr(mail, password, login):
 
 
 def vhod(mail, password):
+    table()
     base = sqlite3.connect(base_path)
     cur = base.cursor()
     information = cur.execute("""SELECT * FROM players""")

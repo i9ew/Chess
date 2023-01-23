@@ -66,6 +66,24 @@ def set_param_in_client(param, value):
         f.writelines("\n".join(a))
 
 
+def del_param_from_client(param):
+    try:
+        with open(user_path, 'r') as f:
+            a = f.readlines()
+    except:
+        a = []
+    with open(user_path, 'w') as f:
+        flag = False
+        for i in range(len(a)):
+            if a[i].split("=")[0] == param:
+                flag = True
+                a[i] = f"{param}="
+            a[i] = a[i].strip()
+        if not flag:
+            a.append(f"{param}=")
+        f.writelines("\n".join(a))
+
+
 def get_param_from_client(param):
     try:
         with open(user_path, 'r') as f:

@@ -1,8 +1,8 @@
 from classes.Board import Board
 from classes.ButtonW import ButtonW
 from classes.ChessGame import ChessGame
-from classes.FEN import *
 from classes.EvaluationW import EvaluationW
+from classes.FEN import *
 from classes.RectW import RectW
 from classes.Scene import Scene
 from functions import *
@@ -13,12 +13,20 @@ class MainScene(Scene):
         super().__init__()
         self.bg_color = ColoursRGB.LICHESS
         self.b = Board()
+
         if get_param_from_client("playFrom"):
             g = ChessGame(get_param_from_client("playFrom"))
+
         elif get_param_from_client("playFromBE"):
             g = ChessGame(get_param_from_client("playFromBE"))
+
         else:
             g = ChessGame()
+
+        self.ev = EvaluationW([70, 500], [100, 188])
+        self.b.game = g
+        self.ev.game = self.b.game
+
         print("---main_scene---")
         self.b.theme = {"primary_color": ColoursRGB.BROWN,
                         "secondary_color": ColoursRGB.CREAM,
@@ -26,7 +34,7 @@ class MainScene(Scene):
                         "hud1": [ColoursRGB.GREEN, 150]}
         self.b.corner = [200, 37]
         self.b.board_size = 800
-        self.b.game = g
+
         try:
             self.b.isreversed = not FEN(g.FEN).turn
         except:
@@ -54,10 +62,8 @@ class MainScene(Scene):
         self.but3.corner = [1085, 400 + 80]
 
         # print(b)
-        ev = EvaluationW([70, 500], [100, 188])
-        ev.game = g
-        self.elements.append("ev", ev, 0)
 
+        self.elements.append("ev", self.ev, 0)
         self.elements.append("but2", self.but2, 0)
         self.elements.append("but3", self.but3, 0)
         self.elements.append("bg_rect", bg_rect, -1)
@@ -66,6 +72,7 @@ class MainScene(Scene):
     def reset_pos_to_ed(self):
         if get_param_from_client("playFromBE"):
             self.b.game = ChessGame(get_param_from_client("playFromBE"))
+            self.ev.game = self.b.game
             try:
                 self.b.isreversed = not FEN(self.b.game.FEN).turn
             except:
@@ -73,6 +80,7 @@ class MainScene(Scene):
 
     def reset_pos_to_def(self):
         self.b.game = ChessGame()
+        self.ev.game = self.b.game
         try:
             self.b.isreversed = not FEN(self.b.game.FEN).turn
         except:
@@ -89,7 +97,8 @@ class MainScene(Scene):
         super().update()
         if self.b.game.FEN != "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1":
             set_param_in_client("playFrom", self.b.game.FEN)
-        if self.b.game.is_mate:
+        if self.b.game.is_mate or self.b.game.is_stalemate:
+            del_param_from_client("playFrom")
             self.scene_manager.goto_scene("screamer")
 
         if get_param_from_client("playFromBE") and get_param_from_client(

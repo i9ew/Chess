@@ -5,3 +5,7 @@ pygame_widgets
 pyperclip
 pygame-textinput
 Pillow
+PyAudio
+pyttsx3
+SpeechRecognition
+vosk
