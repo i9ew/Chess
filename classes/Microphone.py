@@ -1,5 +1,5 @@
 import os  # работа с файловой системой
-
+from functions import *
 import speech_recognition  # распознавание пользовательской речи (Speech-To-Text)
 
 
@@ -12,6 +12,10 @@ class Microphone:
             "hot": "ход",
             "вход": "ход"
         }
+        if __name__ == "__main__":
+            self.path = "microphone-results.wav"
+        else:
+            self.path = create_full_path("/temp/microphone-results.wav")
 
     def record_and_recognize_audio(self, *args: tuple):
         """
@@ -27,7 +31,7 @@ class Microphone:
                 print("Starting listening...")
                 audio = self.recognizer.listen(self.microphone, 5, 5)
 
-                with open("microphone-results.wav", "wb") as file:
+                with open(self.path, "wb") as file:
                     file.write(audio.get_wav_data())
 
             except speech_recognition.WaitTimeoutError:
@@ -82,12 +86,16 @@ class Microphone:
                 if j.isdigit():
                     ans.append(i)
                     break
-        return "".join(ans)
+        ans = "".join(ans)
+        if list(map(lambda x: x.isdigit(), list(ans))) == [0, 1, 0, 1] and len(ans) == 4:
+            return "".join(ans)
+        else:
+            pass
 
     def update(self):
         voice_input = self.record_and_recognize_audio()
         try:
-            os.remove("microphone-results.wav")
+            os.remove(self.path)
         except FileNotFoundError:
             pass
 
@@ -96,19 +104,21 @@ class Microphone:
                 voice_input = voice_input.replace(i, self.rep[i])
 
             if voice_input:
-                print("rec", voice_input)
+                print(f'Recorded: "{voice_input}"')
 
             for i in self.funcs.keys():
                 if i.lower() in voice_input:
                     cleared = self.clear_string(voice_input, i.lower())
                     extracted = self.extract_move(cleared)
-                    self.funcs[i](extracted)
+                    if extracted:
+                        print(f'Move: "{extracted}"')
+                        self.funcs[i](extracted)
         except TypeError:
             pass
         except AttributeError:
             pass
 
 
-m = Microphone({"ход": lambda x: print(1, x)})
-while True:
-    m.update()
+# m = Microphone({"команда": lambda x: print("move", x)})
+# while True:
+#     m.update()

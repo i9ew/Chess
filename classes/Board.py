@@ -69,7 +69,8 @@ class Board:
                             print(*self.game.moves_history)
 
     def update(self):
-        pass
+        if self.game:
+            self.game.update()
 
     def hide(self):
         self.is_hidden = True

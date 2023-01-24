@@ -115,7 +115,7 @@ def create_full_path(path):
     splited_p = path.split("/")
     if hasattr(sys, "_MEIPASS") and FILES_ARE_SAVING_TO_APPDATA:
         return os.path.join(sys._MEIPASS, *splited_p)
-    return os.path.join(*splited_p)
+    return os.path.join(os.getcwd(), *splited_p)
 
 
 def coards_to_indexes(coards):

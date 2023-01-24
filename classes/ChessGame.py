@@ -4,6 +4,7 @@ from classes.FEN import FEN
 from classes.StockfishM import StockfishEngine
 from constants import *
 from constants import Chess as ChessC
+from classes.Microphone import Microphone
 
 
 class ChessGame:
@@ -17,6 +18,10 @@ class ChessGame:
         self.pos_history = []
         self.moves_history = []
         self.evaluation = self.get_evaluation() if FEN_position else None
+
+        self.voice_control_enable = True
+        self.voice_control_word = "команда"
+        self.voice_control = Microphone({self.voice_control_word: lambda x: self.move_request(x[:2], x[2:])})
 
     def move_request(self, from_sqare, to_square):
         fig = self.play_on_boards[0].get_from_sqare(from_sqare)
@@ -116,3 +121,8 @@ class ChessGame:
 
     def all_possible_moves_from(self, sqare):
         return self.engine.all_possible_moves_from(sqare)
+
+    def update(self):
+        if self.voice_control_enable:
+            # self.voice_control.update()
+            pass
