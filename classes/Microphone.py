@@ -6,11 +6,15 @@ import speech_recognition  # распознавание пользователь
 class Microphone:
     def __init__(self, funcs):
         self.funcs = funcs
-        self.recognizer = speech_recognition.Recognizer()
-        self.microphone = speech_recognition.Microphone()
+        self.recognizer = None
+        self.microphone = None
         self.rep = {
             "hot": "ход",
-            "вход": "ход"
+            "вход": "ход",
+            "е": "e",
+            "длинная рокировка": "O-O-O",
+            "короткая рокировка": "O-O",
+            "рокировка": "O-O"
         }
         if __name__ == "__main__":
             self.path = "microphone-results.wav"
@@ -23,7 +27,7 @@ class Microphone:
         """
         with self.microphone:
             recognized_data = ""
-
+            print("Waiting...")
             # регулирование уровня окружающего шума
             self.recognizer.adjust_for_ambient_noise(self.microphone, duration=1)
 
@@ -89,10 +93,17 @@ class Microphone:
         ans = "".join(ans)
         if list(map(lambda x: x.isdigit(), list(ans))) == [0, 1, 0, 1] and len(ans) == 4:
             return "".join(ans)
-        else:
-            pass
+        elif "O-O-O" in string:
+            return "O-O-O"
+        elif "O-O" in string:
+            return "O-O"
 
     def update(self):
+        if self.microphone is None:
+            self.microphone = speech_recognition.Microphone()
+        if self.recognizer is None:
+            self.recognizer = speech_recognition.Recognizer()
+
         voice_input = self.record_and_recognize_audio()
         try:
             os.remove(self.path)
@@ -111,14 +122,18 @@ class Microphone:
                     cleared = self.clear_string(voice_input, i.lower())
                     extracted = self.extract_move(cleared)
                     if extracted:
-                        print(f'Move: "{extracted}"')
+                        print(f'Extracted: "{extracted}"')
                         self.funcs[i](extracted)
         except TypeError:
             pass
         except AttributeError:
             pass
 
+    def run(self):
+        while True:
+            self.update()
 
-# m = Microphone({"команда": lambda x: print("move", x)})
-# while True:
-#     m.update()
+# if __name__ == "__main__":
+#     m = Microphone({"команда": lambda x: print("move", x)})
+#     while True:
+#         m.update()

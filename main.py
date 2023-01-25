@@ -1,6 +1,6 @@
 import pygame
 import pygame_widgets as pw
-
+from multiprocessing import Process
 from classes.SceneManeger import SceneManeger
 from constants import *
 from scenes.main_scene import MainScene
@@ -8,6 +8,8 @@ from scenes.second_scene import SecondScene
 from scenes.board_editor import BoardEditor
 from scenes.Registration import Registration
 from scenes.screamer import Screamer
+from classes.VoiceControl import VoiceControl
+
 from client import *
 
 
@@ -63,4 +65,12 @@ class Game:
 
 if __name__ == "__main__":
     a = Game(NAME, RESOLUTION, FPS)
-    a.run()
+    c = VoiceControl("команда")
+
+    t1 = Process(target=a.run)
+    t2 = Process(target=c.run)
+
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.terminate()

@@ -49,6 +49,7 @@ TIMER_EVENT_10TPS = pygame.USEREVENT + 2
 # Files
 user_path = os.path.join("data", "username.txt")
 base_path = os.path.join("data", "sqlbase")
+voice_path = os.path.join("data", "voicecontrol.txt")
 FILES_ARE_SAVING_TO_APPDATA = False
 
 # Screen
