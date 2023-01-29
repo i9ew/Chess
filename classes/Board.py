@@ -71,6 +71,12 @@ class Board:
     def update(self):
         if self.game:
             self.game.update()
+            if self.pawn_transformation_table.color != self.game.turn and self.pawn_transformation_table.is_active:
+                buf = self.pawn_transformation_table.move
+                self.pawn_transformation_table = PawnTransformation(self.game.turn, self.theme, self.sqare_size,
+                                                                    self.corner)
+                self.pawn_transformation_table.move = buf
+                self.pawn_transformation_table.is_active = True
 
     def hide(self):
         self.is_hidden = True
