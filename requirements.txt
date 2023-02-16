@@ -9,3 +9,4 @@ PyAudio
 pyttsx3
 SpeechRecognition
 vosk
+pyserial

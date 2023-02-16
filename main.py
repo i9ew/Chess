@@ -12,6 +12,8 @@ from classes.VoiceControl import VoiceControl
 
 from client import *
 
+from serialf import Serial
+
 
 class Game:
     def __init__(self, name, size, FPS):
