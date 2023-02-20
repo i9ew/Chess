@@ -21,6 +21,9 @@ class Microphone:
         else:
             self.path = create_full_path("/temp/microphone-results.wav")
 
+        if not os.path.exists(create_full_path("/temp")):
+            os.makedirs(create_full_path("/temp"))
+
     def record_and_recognize_audio(self, *args: tuple):
         """
         Запись и распознавание аудио
@@ -34,7 +37,6 @@ class Microphone:
             try:
                 print("Starting listening...")
                 audio = self.recognizer.listen(self.microphone, 5, 5)
-
                 with open(self.path, "wb") as file:
                     file.write(audio.get_wav_data())
 

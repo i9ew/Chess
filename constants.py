@@ -46,10 +46,16 @@ class Chess:
 TIMER_EVENT_20TPS = pygame.USEREVENT + 1
 TIMER_EVENT_10TPS = pygame.USEREVENT + 2
 
+VOICE_CONTROL_ACTIVATE_WORD = None
+CONNECT_TO_COM = None  # None - auto connect
+SERIAL_BOARD_CONTROL = True
+
 # Files
 user_path = os.path.join("data", "username.txt")
 base_path = os.path.join("data", "sqlbase")
 voice_path = os.path.join("data", "voicecontrol.txt")
+serial_output_path = os.path.join("data", "serialo.txt")
+serial_input_path = os.path.join("data", "seriali.txt")
 FILES_ARE_SAVING_TO_APPDATA = False
 
 # Screen

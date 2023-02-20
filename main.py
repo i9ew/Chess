@@ -66,13 +66,19 @@ class Game:
 
 
 if __name__ == "__main__":
+
     a = Game(NAME, RESOLUTION, FPS)
-    c = VoiceControl("команда")
+    c = VoiceControl(VOICE_CONTROL_ACTIVATE_WORD)
+    s = Serial(CONNECT_TO_COM)
 
     t1 = Process(target=a.run)
     t2 = Process(target=c.run)
+    t3 = Process(target=s.run)
 
     t1.start()
     t2.start()
+    t3.start()
+
     t1.join()
     t2.terminate()
+    t3.terminate()

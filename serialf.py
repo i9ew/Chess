@@ -1,7 +1,9 @@
 import sys
 import glob
 import serial
-import webbrowser
+from constants import *
+from functions import *
+from time import sleep
 
 
 class Serial:
@@ -9,16 +11,29 @@ class Serial:
         self.port = port
         self.bps = bps
         self.ser = None
-        self.on_read = None
+        self.on_read = self.activated
+        clear_file(serial_input_path)
+        clear_file(serial_output_path)
 
     def update(self):
+        sleep(0.1)
         data = self.read_s()
-        print(data)
-        if self.on_read is not None:
-            self.on_read(data)
+        if data is not None:
+            data = data.decode()
+            print(f"Serial: {data}")
+            if self.on_read is not None:
+                self.on_read(data)
+
+        poped = pop_string_from_file(serial_input_path)
+        if poped is not None:
+            print(poped)
+            self.write_s(poped)
 
     def onRead(self, func):
         self.on_read = func
+
+    def activated(self, x):
+        append_string_to_file(serial_output_path, x)
 
     def init_port(self):
         if self.port is None:
@@ -31,8 +46,13 @@ class Serial:
         else:
             self.ser = self.opens(port=self.port)
 
+    def run(self):
+        self.init_port()
+        while True:
+            self.update()
+
     def write_s(self, command):
-        self.ser.write(command)
+        self.ser.write(command.encode())
 
     def serial_ports(self):
         if sys.platform.startswith('win'):

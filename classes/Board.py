@@ -3,6 +3,7 @@ from __future__ import annotations
 from classes.FEN import FEN
 from classes.HUDobjects import *
 from classes.PawnTransformation import PawnTransformation
+from classes.EndGameWidget import EndGameWidget
 
 
 class Board:
@@ -29,6 +30,9 @@ class Board:
 
         self.pawn_transformation_table = PawnTransformation(Chess.WHITE_FIGURE, self.theme, self.sqare_size,
                                                             self.corner)
+        self.egw = EndGameWidget(self.corner, self.sqare_size, self.theme)
+        self.egw.hide()
+
         self.watch_mode = False
 
         self.board_moving = None
@@ -48,6 +52,7 @@ class Board:
                 sc.blit(image, coards)
             if not self.watch_mode:
                 self.pawn_transformation_table.draw(sc)
+            self.egw.draw(sc)
 
     def input_processing(self, events, events_p):
         if not self.is_hidden:
@@ -77,6 +82,14 @@ class Board:
                                                                     self.corner)
                 self.pawn_transformation_table.move = buf
                 self.pawn_transformation_table.is_active = True
+            if self.game.get_verdict() != 2 and not self.watch_mode:
+                self.egw.show()
+                if self.egw.verdict != self.game.get_verdict() or self.egw.corner != self.corner or self.egw.square_size != self.sqare_size:
+                    self.egw = EndGameWidget(self.corner, self.sqare_size, self.theme)
+                    self.egw.set_verdict(self.game.get_verdict())
+                self.egw.update()
+            else:
+                self.egw.hide()
 
     def hide(self):
         self.is_hidden = True

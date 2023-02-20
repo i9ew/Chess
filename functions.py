@@ -95,6 +95,57 @@ def get_param_from_client(param):
         return None
 
 
+def append_string_to_file(file, string):
+    a = []
+    if os.path.isfile(file):
+        with open(file, "r") as f:
+            a = list(map(lambda x: x.strip(), f.readlines()))
+    a = ("\n" if len(a) != 0 else "") + "\n".join(a)
+    with open(file, "w") as f:
+        f.write(string + a)
+
+
+def write_string_to_file(file, string):
+    with open(file, "w") as f:
+        f.write(string)
+
+
+def read_string_from_file(file):
+    if file_is_empty(file):
+        return None
+    with open(file, "r") as f:
+        a = f.readlines()
+    a = a[-1].strip()
+    return a
+
+
+def pop_string_from_file(file):
+    if file_is_empty(file):
+        return None
+    with open(file, "r") as f:
+        a = list(map(lambda x: x.strip(), f.readlines()))
+    if a is None:
+        return None
+    ans = a[-1]
+    if ans is not None:
+        a = a[:-1]
+        clear_file(file)
+        for i in reversed(a):
+            append_string_to_file(file, i)
+    return ans
+
+
+def file_is_empty(file):
+    with open(file, "r") as f:
+        a = f.read().strip()
+    return a in [None, ""]
+
+
+def clear_file(file):
+    with open(file, "w") as f:
+        f.write("")
+
+
 def clear_client():
     with open(user_path, 'w') as f:
         f.write("")

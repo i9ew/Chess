@@ -5,6 +5,7 @@ from classes.EvaluationW import EvaluationW
 from classes.FEN import *
 from classes.RectW import RectW
 from classes.Scene import Scene
+from classes.EndGameWidget import EndGameWidget
 from functions import *
 
 
@@ -43,6 +44,9 @@ class MainScene(Scene):
         bg_rect = RectW((*(self.bg_color * 1.8).rgb, 255), [1035, 350 + 80],
                         [530, 400], radius=50)
 
+
+        # egw = EndGameWidget(self.b.corner, self.b.sqare_size, self.b.theme)
+
         self.but2 = ButtonW("Начальная позиция")
         self.but2.text_color = ColoursRGB.LIGHTGREY.rgb
         self.but2.set_font("arial", 40)
@@ -62,7 +66,7 @@ class MainScene(Scene):
         self.but3.corner = [1085, 400 + 80]
 
         # print(b)
-
+        # self.elements.append("egw", egw, 3)
         self.elements.append("ev", self.ev, 0)
         self.elements.append("but2", self.but2, 0)
         self.elements.append("but3", self.but3, 0)
@@ -98,8 +102,9 @@ class MainScene(Scene):
         if self.b.game.FEN != "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1":
             set_param_in_client("playFrom", self.b.game.FEN)
         if self.b.game.is_mate or self.b.game.is_stalemate:
-            del_param_from_client("playFrom")
-            self.scene_manager.goto_scene("screamer")
+            # del_param_from_client("playFrom")
+            # self.scene_manager.goto_scene("screamer")
+            pass
 
         if get_param_from_client("playFromBE") and get_param_from_client(
                 "playFromBE") != get_param_from_client("playFrom"):

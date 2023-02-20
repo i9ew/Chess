@@ -3,7 +3,9 @@ from constants import *
 
 
 class VoiceControl:
-    def __init__(self, target_word):
+    def __init__(self, target_word=""):
+        if target_word is None:
+            target_word = ""
         self.voice_control_word = target_word
         sl = {self.voice_control_word: self.activated}
         self.voice_control = Microphone(sl)

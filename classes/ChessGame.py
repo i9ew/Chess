@@ -5,6 +5,7 @@ from classes.StockfishM import StockfishEngine
 from constants import *
 from constants import Chess as ChessC
 from classes.VoiceControl import VoiceControl
+from functions import *
 
 
 class ChessGame:
@@ -63,6 +64,13 @@ class ChessGame:
         move += f"{move_l}{from_sqare}-{to_square}"
         self.pos_history.append(self.engine.position)
         self.engine.make_move(from_sqare, to_square)
+
+        if SERIAL_BOARD_CONTROL:
+            serial_command1 = f"c {coards_to_indexes(from_sqare)[0]} {coards_to_indexes(from_sqare)[1]}"
+            serial_command2 = f"c {coards_to_indexes(to_square)[0]} {coards_to_indexes(to_square)[1]}"
+            append_string_to_file(serial_input_path, serial_command1)
+            append_string_to_file(serial_input_path, serial_command2)
+
         self.board.set_board_fen(self.engine.position.split()[0])
         self.board.turn = self.turn
         for board in self.play_on_boards:
@@ -71,7 +79,7 @@ class ChessGame:
                 board.isreversed = True if self.turn == ChessC.BLACK_FIGURE else False
             except:
                 pass
-        print(self.play_on_boards[0])
+        # print(self.play_on_boards[0])
         if self.is_mate:
             move += "#"
         elif self.is_check:
@@ -99,7 +107,8 @@ class ChessGame:
 
     @property
     def turn(self):
-        return FEN(self.engine.position).turn
+        if self.engine.position:
+            return FEN(self.engine.position).turn
 
     @property
     def move_number(self):
@@ -116,6 +125,24 @@ class ChessGame:
     @property
     def is_stalemate(self):
         return self.board.is_stalemate()
+
+    @property
+    def is_draw(self):
+        return self.board.is_variant_draw()
+
+    @property
+    def is_end(self):
+        return self.board.is_game_over(claim_draw=True)
+
+    def get_verdict(self):
+        if self.is_end:
+            if self.is_mate:
+                if self.board.is_attacked_by(Chess.BLACK_FIGURE, self.board.king(Chess.WHITE_FIGURE)):
+                    return -1
+                else:
+                    return 1
+            return 0
+        return 2
 
     def all_possible_moves_from(self, sqare):
         return self.engine.all_possible_moves_from(sqare)

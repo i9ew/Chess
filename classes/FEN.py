@@ -13,6 +13,7 @@ class FEN:
         self.position = []
         castled = {"white": {"O-O": "K" in splited[2], "O-O-O": "Q" in splited[2]},
                    "black": {"O-O": "k" in splited[2], "O-O-O": "q" in splited[2]}}
+        castled = None
         position_str = splited[0].split("/")
 
         for i in range(len(position_str)):
